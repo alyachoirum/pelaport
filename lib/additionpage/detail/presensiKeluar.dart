@@ -32,7 +32,8 @@ class _PresensiKeluarState extends State<PresensiKeluar> {
     Future _save() async {
       BotToast.showLoading();
 
-      await ApiController().checkout(id_presensi: id_presensi).then((value) {
+      await ApiController().checkout(id_presensi: id_presensi).then((response) {
+        var value = response.data;
         if (value['success'] == true) {
           BotToast.closeAllLoading();
           showDialog(
@@ -188,14 +189,16 @@ class _PresensiKeluarState extends State<PresensiKeluar> {
   }
 
   Future init() async {
-    await ApiController().getUser().then((value) {
+    await ApiController().getUser().then((response) {
+      var value = response.data;
       if (mounted)
         setState(() {
           data = value;
           print("data=$data");
         });
     });
-    await ApiController().getJamMasuk().then((value) {
+    await ApiController().getJamMasuk().then((response) {
+      var value = response.data; 
       if (mounted)
         setState(() {
           jammasuk = value["check_in"];

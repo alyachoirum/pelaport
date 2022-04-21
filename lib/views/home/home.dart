@@ -1,65 +1,3 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:pelaport/constant.dart';
-// import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-// import 'package:pelaport/home.dart';
-// import 'package:pelaport/views/cari/cari.dart';
-// import 'package:pelaport/views/laporan/tambah.dart';
-// import 'package:pelaport/views/notifikasi/notifikasi.dart';
-// import 'package:pelaport/views/profile/profile.dart';
-
-// class Home extends StatefulWidget {
-//   const Home({Key? key}) : super(key: key);
-
-//   @override
-//   _HomeState createState() => _HomeState();
-// }
-
-// class _HomeState extends State<Home> {
-//   int _bottomNavIndex = 0;
-
-//   List<IconData> iconList = [
-//     CupertinoIcons.home,
-//     CupertinoIcons.search,
-//     CupertinoIcons.bell,
-//     CupertinoIcons.person,
-//   ];
-
-//   final List<Widget> screen = [
-//     Homes(),
-//     Cari(),
-//     Notifikasi(),
-//     Profile()
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//       return Scaffold(
-//         body: screen[_bottomNavIndex],
-//         floatingActionButton: FloatingActionButton(
-//             onPressed: (){
-//               Navigator.push(context, MaterialPageRoute(builder: (context){
-//                 return TambahLaporan();
-//               }));
-//             },
-//             child: Icon(CupertinoIcons.add),
-//         ),
-//         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//         bottomNavigationBar: AnimatedBottomNavigationBar(
-//             icons: iconList,
-//             activeIndex: _bottomNavIndex,
-//             gapLocation: GapLocation.center,
-//             // notchSmoothness: NotchSmoothness.defaultEdge,
-//             onTap: (index) {
-//               print(index);
-//               setState(() => _bottomNavIndex = index);
-//             },
-//             //other params
-//         ),
-//       );
-//   }
-// }
-
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -173,6 +111,7 @@ class _MainScreenState extends State<MainScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              _showBottomSheet();
                               pindahPageCupertino(context, Kehadiran());
                             },
                             child: Container(
@@ -205,6 +144,7 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
+                              _showBottomSheet();
                               pindahPageCupertino(context, Absen());
                             },
                             child: Container(
@@ -242,6 +182,7 @@ class _MainScreenState extends State<MainScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              _showBottomSheet();
                               pindahPageCupertino(context, Pengajuan());
                             },
                             child: Container(
@@ -277,9 +218,10 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              // pindahPageCupertino(context, TambahLaporan());
-                              MyFunction().belumTersedia();
+                            onTap: (){
+                              _showBottomSheet();
+                              pindahPageCupertino(context, TambahLaporan());
+                              // MyFunction().belumTersedia();
                             },
                             child: Container(
                               child: Center(

@@ -11,7 +11,9 @@ var marginhorizontal;
 // String protokol = "https://";
 
 //URL LOCAL
-String baseUrl = "192.168.1.30:8000";
+String baseUrl = "192.168.18.185:8000";
 String protokol = "http://";
 
 var dataUser;
+
+String defaultErrorText = "Terjadi Kesalahan";

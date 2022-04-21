@@ -88,7 +88,8 @@ class _PresensiMasukState extends State<PresensiMasuk> {
               " - " +
               data['jadwal']['jam_keluar'].toString();
         }
-        await ApiController().checkin(body).then((value) {
+        await ApiController().checkin(body).then((response) {
+          var value = response.data;
           if (value['success'] == true) {
             BotToast.closeAllLoading();
             showDialog(
@@ -262,8 +263,8 @@ class _PresensiMasukState extends State<PresensiMasuk> {
     await ApiController().getUser().then((value) {
       if (mounted)
         setState(() {
-          data = value;
-          action = value["jadwal"]["action"];
+          data = value.data;
+          action = value.data["jadwal"]["action"];
           print("data=$action");
         });
     });

@@ -172,13 +172,11 @@ class _LemburState extends State<Lembur> {
     };
 
     print(body);
-    await ApiController().lemburSubmit(body).then((value) {
+    await ApiController().lemburSubmit(body).then((response) {
+      var value = response.data;
       BotToast.closeAllLoading();
 
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) {
-        return Pengajuan();
-      }), (route) => false);
+      Navigator.pop(context);
 
       BotToast.showText(
           text: "Berhasil mengajukan form lembur",
@@ -190,9 +188,10 @@ class _LemburState extends State<Lembur> {
 
   Future init() async {
     await ApiController().getUser().then((value) {
-      if (mounted)
+      if (mounted
+      )
         setState(() {
-          data = value;
+          data = value.data;
           print("data=$data");
         });
     });

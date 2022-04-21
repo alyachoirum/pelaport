@@ -145,13 +145,10 @@ class _CutiState extends State<Cuti> {
     };
 
     print(body);
-    await ApiController().cutiSubmit(body).then((value) {
+    await ApiController().cutiSubmit(body).then((response) {
+      var value = response.data;
       BotToast.closeAllLoading();
-
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) {
-        return Absen();
-      }), (route) => false);
+      Navigator.pop(context);
 
       BotToast.showText(
           text: "Berhasil mengajukan form dispensasi",
@@ -165,7 +162,7 @@ class _CutiState extends State<Cuti> {
     await ApiController().getUser().then((value) {
       if (mounted)
         setState(() {
-          data = value;
+          data = value.data;
           print("data=$data");
         });
     });

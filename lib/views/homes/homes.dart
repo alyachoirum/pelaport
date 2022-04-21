@@ -1,19 +1,28 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/function/route.dart';
 import 'package:pelaport/views/home/detail_laporan/detail_laporan.dart';
 import 'package:pelaport/views/home/detail_pengumuman/detail_pengumuman.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:pelaport/views/schedule/utils.dart';
 
 class Homes extends StatefulWidget {
   Homes({Key? key}) : super(key: key);
+  
 
   @override
   _HomesState createState() => _HomesState();
 }
 
 class _HomesState extends State<Homes> {
+  @override
+  void initState() {
+    super.initState();
+    setkEvents();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,18 +150,6 @@ class _HomesState extends State<Homes> {
                         fontWeight: FontWeight.bold,
                         fontSize: tinggilayar / lebarlayar * 9),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {},
-                  //   child: Container(
-                  //     padding: EdgeInsets.all(5),
-                  //     child: Text(
-                  //       "Lainnya",
-                  //       style: TextStyle(
-                  //           color: primarycolor,
-                  //           fontSize: tinggilayar / lebarlayar * 8.5),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -160,7 +157,7 @@ class _HomesState extends State<Homes> {
               height: tinggilayar / 50,
             ),
             Container(
-              height: 600,
+              height: 300,
               child: WebView(
                 initialUrl: 'http://$baseUrl/maps/android/absen',
                 javascriptMode: JavascriptMode.unrestricted,
@@ -179,9 +176,11 @@ class _HomesState extends State<Homes> {
                   // });
                   print('MyLog age finished loading: $url');
                 },
-                gestureNavigationEnabled: true,
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                new Factory<OneSequenceGestureRecognizer>(() => new EagerGestureRecognizer(),),].toSet(),
               ),
             ),
+            
           ],
         ),
       ),

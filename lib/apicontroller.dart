@@ -2,49 +2,83 @@ import 'dart:convert';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_status_code/http_status_code.dart';
 import 'package:pelaport/constant.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
+import 'package:pelaport/apiresponse.dart';
+import 'dart:io';
 
 class ApiController {
   late Response response;
   var dio = Dio();
 
-  Future connection(
-      {String method = "get",
-      String path = "",
-      Map<String, String>? body}) async {
+  Future connection({String method = "get",String path = "" ,var parameter = null, Map<String, String>? body}) async {
     Uri url;
-
     BotToast.showLoading();
-
     // if (protokol == 'https://')
     //   url = Uri.https(baseUrl, "api/" + path);
     // else
-
-    url = Uri.http(baseUrl, "api/" + path);
+    url = Uri.http(baseUrl, "api/" + path,parameter);
     var res;
-
     if (method == "get") {
-      res = await http.get(url).then((response) {
-        var body = jsonDecode(response.body);
-        print(body);
-        return body;
-      });
-    } else {
-      res = await http.post(url, body: body).then((response) {
-        var body = jsonDecode(response.body);
+      final res = await http.get(url);
+      print(url);
+      try{
+        if(res.statusCode == StatusCode.OK){
+          var data = jsonDecode(res.body);
+          print(data);
 
-        print(body);
-        return body;
-      });
+          BotToast.closeAllLoading();
+          return ApiResponse<dynamic>(true, data:data);
+        }else{
+          print(res.body);
+          print(url);
+          BotToast.closeAllLoading();
+          return ApiResponse<String>(false, message: "tidak bisa daftar");
+        }
+
+      }catch($e){
+        print($e);
+        BotToast.closeAllLoading();
+        return ApiResponse(false, message: defaultErrorText);
+      }
+    } else {
+      res = await http.post(url, body: body);
+      print(res.body);
+      try{
+        if(res.statusCode == StatusCode.OK ){
+          print("iki;lo");
+          var data = jsonDecode(res.body);
+          BotToast.closeAllLoading();
+          return ApiResponse<dynamic>(true, data:data);
+        }else if(res.statusCode == StatusCode.CREATED){
+          var data = jsonDecode(res.body);
+          BotToast.closeAllLoading();
+          return ApiResponse<dynamic>(true, data:data);
+        }else if(res.statusCode == StatusCode.UNAUTHORIZED){
+          var data = jsonDecode(res.body);
+          BotToast.closeAllLoading();
+          print("padahal iki");
+          return ApiResponse<dynamic>(false, data:data);
+        }else{
+          BotToast.closeAllLoading();
+          return ApiResponse<String>(false, message: "tidak bisa daftar");
+        }
+
+      }catch($e){
+        print($e);
+        BotToast.closeAllLoading();
+        return ApiResponse(false, message: defaultErrorText);
+      }
     }
 
     return res;
   }
 
   Future pencarianParent() async {
+    // final response = await http.get(url);
     return await connection(method: "get", path: "laporan/create");
   }
 
@@ -65,24 +99,11 @@ class ApiController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var idregu = prefs.getString('id_regu');
     var idKar = prefs.getString('id_karyawan');
-    response = await dio.get(protokol + baseUrl + '/api/user/get_user',
-        queryParameters: {'id_karyawan': idKar, 'id_regu': idregu});
-
-    return response.data;
-    // return await connection(
-    //     method: "get", path: "user/get_user?id_karyawan=447&id_regu=2");
+    return await connection(method: 'get', path: 'user/get_user',parameter: {'id_karyawan': idKar, 'id_regu': idregu});
   }
 
   Future checkin(var body) async {
-    print(body);
-    try {
-      var formData = FormData.fromMap(body);
-      response = await dio.post(protokol + baseUrl + '/api/user/checkin',
-          data: formData);
-      return response.data;
-    } catch (e) {
-      print(e);
-    }
+    return await connection(method: 'post',path: 'user/checkin', body: body);
   }
 
   Future checkout({required String id_presensi}) async {
@@ -90,20 +111,13 @@ class ApiController {
 
     var body = {'id_presensi': id_presensi};
 
-    try {
-      var formData = FormData.fromMap(body);
-      response = await dio.post(protokol + baseUrl + '/api/user/checkout',
-          data: formData);
-      print("cekout=${response.data}");
-      return response.data;
-    } catch (e) {
-      print(e);
-    }
+    return await connection(method: 'post',path: 'user/checkout', body: body);
   }
 
   Future getJamMasuk() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var nik = prefs.getString('nik');
+    return await connection(method: 'post',path: 'user/checklist_jammasuk',parameter:{'nik':nik.toString()});
     response = await dio.post(
         protokol + baseUrl + '/api/user/checklist_jammasuk',
         queryParameters: {'nik': nik});
@@ -160,6 +174,14 @@ class ApiController {
     body['nik'] = nik.toString();
     return await connection(
         method: 'post', path: "user/lemburkhusus_submit", body: body);
+  }
+
+  Future getJadwal(Map<String,String> body) async{
+    return await connection(method: 'get',path: "user/get_jadwal",parameter: body);
+  }
+
+  Future getDataAbsen(Map<String, String> body) async{
+    return await connection(method: 'get',path: "user/list_absen",parameter: body);
   }
 
   Future<Position> getCurrentLocation() async {

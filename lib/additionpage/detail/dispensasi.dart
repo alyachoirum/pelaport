@@ -146,13 +146,12 @@ class _DispensasiState extends State<Dispensasi> {
     };
 
     print(body);
-    await ApiController().dispensasiSubmit(body).then((value) {
+    await ApiController().dispensasiSubmit(body).then((response) {
+      var value = response.data;
       BotToast.closeAllLoading();
+      Navigator.pop(context);
 
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) {
-        return Absen();
-      }), (route) => false);
+      
 
       BotToast.showText(
           text: "Berhasil mengajukan form dispensasi",
@@ -166,7 +165,7 @@ class _DispensasiState extends State<Dispensasi> {
     await ApiController().getUser().then((value) {
       if (mounted)
         setState(() {
-          data = value;
+          data = value.data;
           print("data=$data");
         });
     });

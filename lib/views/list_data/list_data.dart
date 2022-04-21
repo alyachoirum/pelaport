@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:pelaport/additionpage/list_data_detail/list_absen.dart';
 import 'package:pelaport/additionpage/list_data_detail/list_presensi.dart';
 import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
@@ -36,7 +37,8 @@ class _ListDataState extends State<ListData> {
                       fit: BoxFit.cover,
                     ),
                     fungsi: () {
-                      MyFunction().belumTersedia();
+                      // MyFunction().belumTersedia();
+                      pindahPageCupertino(context, ListPresensi());
                     },
                     judul: "List Presensi",
                     deskripsi: "Ini Deksripsi",
@@ -50,7 +52,8 @@ class _ListDataState extends State<ListData> {
                       fit: BoxFit.cover,
                     ),
                     fungsi: () {
-                      MyFunction().belumTersedia();
+                      pindahPageCupertino(context, ListAbsen());
+                      // MyFunction().belumTersedia();
                     },
                     judul: "List Absen",
                     deskripsi: "Ini Deksripsi",

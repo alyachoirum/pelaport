@@ -146,13 +146,10 @@ class _IjinState extends State<Ijin> {
     };
 
     print(body);
-    await ApiController().ijinSubmit(body).then((value) {
+    await ApiController().ijinSubmit(body).then((response) {
+      var value = response.data;
       BotToast.closeAllLoading();
-
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) {
-        return Absen();
-      }), (route) => false);
+      Navigator.pop(context);
 
       BotToast.showText(
           text: "Berhasil mengajukan form ijin",
@@ -166,7 +163,7 @@ class _IjinState extends State<Ijin> {
     await ApiController().getUser().then((value) {
       if (mounted)
         setState(() {
-          data = value;
+          data = value.data;
           print("data=$data");
         });
     });

@@ -98,7 +98,7 @@ class _TukarShiftState extends State<TukarShift> {
     await ApiController().getUser().then((value) {
       if (mounted)
         setState(() {
-          data = value;
+          data = value.data;
           print("data=$data");
         });
     });

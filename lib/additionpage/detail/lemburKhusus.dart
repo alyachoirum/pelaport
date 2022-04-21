@@ -173,13 +173,11 @@ class _LemburKhususState extends State<LemburKhusus> {
     };
 
     print(body);
-    await ApiController().lemburkhususSubmit(body).then((value) {
+    await ApiController().lemburkhususSubmit(body).then((response) {
+      var value = response.data;
       BotToast.closeAllLoading();
 
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) {
-        return Pengajuan();
-      }), (route) => false);
+      Navigator.pop(context);
 
       BotToast.showText(
           text: "Berhasil mengajukan form lembur khusus",
@@ -193,7 +191,7 @@ class _LemburKhususState extends State<LemburKhusus> {
     await ApiController().getUser().then((value) {
       if (mounted)
         setState(() {
-          data = value;
+          data = value.data;
           print("data=$data");
         });
     });

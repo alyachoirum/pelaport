@@ -6,21 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:pelaport/additionpage/detail/presensi.dart';
 import 'package:pelaport/additionpage/detail/presensiKeluar.dart';
 import 'package:pelaport/additionpage/kehadiran.dart';
-import 'package:pelaport/additionpage/list_data_detail/list_presensi_detail.dart';
+import 'package:pelaport/additionpage/list_data_detail/list_absen_detail.dart';
 import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/function/route.dart';
 import 'package:pelaport/my_function.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class ListPresensi extends StatefulWidget {
-  const ListPresensi({Key? key}) : super(key: key);
+class ListAbsen extends StatefulWidget {
+  const ListAbsen({Key? key}) : super(key: key);
 
   @override
-  _ListPresensiState createState() => _ListPresensiState();
+  _ListAbsenState createState() => _ListAbsenState();
 }
 
-class _ListPresensiState extends State<ListPresensi> {
+class _ListAbsenState extends State<ListAbsen> {
   String _nik = '';
   Map<int,String> bulan = {
     1:'Januari',
@@ -35,6 +35,11 @@ class _ListPresensiState extends State<ListPresensi> {
     10:'Oktober',
     11:'November',
     12:'Desember'
+  };
+  Map<int,String> tipe = {
+    0:'Belum Validasi',
+    1:'Sudah Validasi',
+    2:'Ditolak',
   };
   @override
   void initState() {
@@ -63,7 +68,7 @@ class _ListPresensiState extends State<ListPresensi> {
           backgroundColor: secondarycolor,
           elevation: 0,
           title: Text(
-            "List Presensi",
+            "List Absen",
             style:
                 TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold),
           ),
@@ -74,12 +79,12 @@ class _ListPresensiState extends State<ListPresensi> {
             mainAxisAlignment: MainAxisAlignment.start,
             direction: Axis.vertical,
             children: [
-              for(int i=1;i <= bulan.length;i++) 
+              for(int i=0;i < tipe.length;i++) 
                 LitleCardFunction(
                   fungsi: (){
-                    pindahPageCupertino(context, ListPresensiDetail(bulan:i.toString(),nik:_nik.toString(),judul: "Presensi Bulan "+bulan[i].toString(),));
+                    pindahPageCupertino(context, ListAbsenDetail(tipe:i.toString(),nik:_nik.toString(),judul: "Presensi Bulan "+tipe[i].toString(),));
                   }, 
-                  judul: bulan[i].toString()
+                  judul: tipe[i].toString()
                 ),
               
             ],

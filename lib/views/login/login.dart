@@ -40,7 +40,8 @@ class _LoginState extends State<Login> {
       await ApiController().getUser().then((value) {
         if (mounted)
           setState(() {
-            dataUser = value;
+            dataUser = value.data;
+            print("ok");
             print(dataUser);
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (context) {
@@ -64,8 +65,12 @@ class _LoginState extends State<Login> {
         'password': _passwordcontroller.text,
       };
       await ApiController().login(body).then(
-        (value) {
-          if (value['success'] == false) {
+        (response) {
+          var value = response.data;
+          print(response.status);
+          print(response.data);
+          print(value);
+          if (response.status == false) {
             BotToast.closeAllLoading();
             showDialog(
               context: context,
@@ -85,7 +90,7 @@ class _LoginState extends State<Login> {
                 );
               },
             );
-          } else if (value['success'] == true) {
+          } else if (response.status == true) {
             BotToast.closeAllLoading();
             saveToken(value['token']);
             saveId(value['id_regu'].toString(), value['id_karyawan'].toString(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/function/route.dart';
 import 'package:pelaport/home.dart';
@@ -63,8 +64,11 @@ class _JadwalState extends State<Jadwal> {
     },
   );
 
+  var data;
+
   @override
   void initState() {
+    print("oke tok");
     /// Add more events to _markedDateMap EventList
     _markedDateMap.add(
         new DateTime(2021, 2, 25),
@@ -99,6 +103,7 @@ class _JadwalState extends State<Jadwal> {
         icon: _eventIcon,
       ),
     ]);
+    init();
     super.initState();
   }
 
@@ -227,5 +232,16 @@ class _JadwalState extends State<Jadwal> {
             ],
           ),
         ));
+  }
+
+  Future init() async{
+    await ApiController().getUser().then((value) {
+      print(value);
+      if (mounted)
+        setState(() {
+          data = value.data;
+          print(data);
+        });
+    });
   }
 }

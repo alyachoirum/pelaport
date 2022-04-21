@@ -109,7 +109,8 @@ class _KehadiranState extends State<Kehadiran> {
   init() async {
     String nik = await MyFunction().getNik();
     print('$nik');
-    await ApiController().checklistPresensi({"nik": nik}).then((value) {
+    await ApiController().checklistPresensi({"nik": nik}).then((response) {
+      var value = response.data;
       BotToast.closeAllLoading();
 
       if (mounted)

@@ -100,18 +100,23 @@ class _SplashScreenState extends State<SplashScreen> {
       await ApiController().getUser().then((value) {
         if (mounted)
           setState(() {
-            dataUser = value;
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (context) {
-              return MainScreen();
-            }), (route) => false);
+            // print(value.status);
+            if(value.status){
+              print("oke");
 
-            BotToast.showText(
-                text: "Login Sukses",
-                crossPage: true,
-                textStyle: TextStyle(fontSize: 14, color: Colors.white),
-                contentColor: Colors.green);
-          });
+              dataUser = value.data;
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) {
+                return MainScreen();
+              }), (route) => false);
+
+              BotToast.showText(
+                  text: "Login Sukses",
+                  crossPage: true,
+                  textStyle: TextStyle(fontSize: 14, color: Colors.white),
+                  contentColor: Colors.green);
+            }
+            });
       });
     } else {
       Navigator.push(context,

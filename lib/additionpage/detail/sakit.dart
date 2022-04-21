@@ -201,13 +201,11 @@ class _SakitState extends State<Sakit> {
     };
 
     print(body);
-    await ApiController().sakitSubmit(body).then((value) {
+    await ApiController().sakitSubmit(body).then((response) {
+      var value = response.data;
       BotToast.closeAllLoading();
 
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) {
-        return Absen();
-      }), (route) => false);
+      Navigator.pop(context);
 
       BotToast.showText(
           text: "Berhasil mengajukan form sakit",
@@ -221,7 +219,7 @@ class _SakitState extends State<Sakit> {
     await ApiController().getUser().then((value) {
       if (mounted)
         setState(() {
-          data = value;
+          data = value.data;
           print("data=$data");
         });
     });

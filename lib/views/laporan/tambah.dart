@@ -5,10 +5,12 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pelaport/apicontroller.dart';
+import 'package:pelaport/apiresponse.dart';
 import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/class/public_function.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/views/home/home.dart';
+import 'package:pelaport/function/route.dart';
 import 'package:pelaport/views/laporan/pencarian_parent.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -57,7 +59,7 @@ class _TambahLaporanState extends State<TambahLaporan> {
   @override
   void initState() {
     super.initState();
-
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     init();
   }
 
@@ -287,45 +289,50 @@ class _TambahLaporanState extends State<TambahLaporan> {
         clickClose: false, allowClick: false, crossPage: false);
 
     Map<String, String> body = {
-      'id_kategori': idKategori.toString(),
-      'judul_laporan': judulController.text,
-      'prioritas': prioritasController.text,
-      'deskripsi': deskripsiController.text,
-      'tingkat': dataUser['karyawan']['user']['id_level_user'],
-      'id_departemen': dataUser['karyawan']['user']['id_departemen'],
+      'id_kategori': idKategori.toString(), //int
+      'judul_laporan': judulController.text.toString(), //string
+      'prioritas': prioritasController.text.toString(), //string
+      'deskripsi': deskripsiController.text.toString(), //string
+      'tingkat': dataUser['karyawan']['user']['id_level_user'].toString(),
+      'id_departemen': dataUser['karyawan']['user']['id_departemen'].toString(),
       'appv1': '',
       'appv2': '',
       'appv3': '',
       'publish': '1',
-      'nik': dataUser['karyawan']['nik'],
+      'id_zona': '1',
+      'nik': dataUser['karyawan']['nik'].toString(),
       'lat': lat.toString(),
       'lng': lng.toString(),
       'foto': jsonEncode(fotoBase64)
     };
 
-    // print(body);
+    // print(dataUser);
+    ApiResponse response =  await ApiController().laporanStore(body);
 
-    await ApiController().laporanStore(body).then((value) {
+    print(response);
+    if(1==1){
+      Navigator.pop(context);
       BotToast.closeAllLoading();
-
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) {
-        return MainScreen();
-      }), (route) => false);
-
       BotToast.showText(
           text: "Berhasil menambahkan laporan baru",
           crossPage: true,
           textStyle: TextStyle(fontSize: 14, color: Colors.white),
           contentColor: Colors.green);
-    });
+
+    }else{
+      Navigator.pop(context);
+      BotToast.closeAllLoading();
+      BotToast.showText(
+          text: "tidak berhasil Berhasil menambahkan laporan baru",
+          crossPage: true,
+          textStyle: TextStyle(fontSize: 14, color: Colors.white),
+          contentColor: Colors.green);
+    }
   }
 
   Future getKategori() async {
-    final result =
-        await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return PencarianParent(tipe: "kategori");
-    }));
+    final result = await pindahPageCupertinoResult(context, PencarianParent(tipe: "kategori"));
+    
 
     if (result != null) {
       if (mounted)
