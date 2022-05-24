@@ -15,7 +15,8 @@ class Kehadiran extends StatefulWidget {
 }
 
 class _KehadiranState extends State<Kehadiran> {
-  bool cekIn = false, cekOut = false;
+  bool cekIn = false, cekOut = false,cekOutMessage = false;
+  String jamKeluar = "";
   @override
   void initState() {
     super.initState();
@@ -98,6 +99,17 @@ class _KehadiranState extends State<Kehadiran> {
                 judul: "Presensi Keluar",
                 deskripsi: "Wajib mengisi presensi keluar",
               ),
+              SizedBox(
+                height: tinggilayar / 40,
+              ),
+              (cekOutMessage) ? Text(
+                "Anda bisa checkout pada saat jam "+jamKeluar,
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                    fontSize: tinggilayar / lebarlayar * 6),
+              ): SizedBox(
+                height: tinggilayar / 40,
+              ),
             ],
           ),
         ),
@@ -116,7 +128,8 @@ class _KehadiranState extends State<Kehadiran> {
         setState(() {
           cekIn = value['checkin'];
           cekOut = value['checkout'];
-
+          cekOutMessage = value["checkout_message"];
+          jamKeluar = value["jam_keluar"];
           print('$cekIn = $cekOut = $nik');
         });
     });

@@ -21,6 +21,7 @@ class Sakit extends StatefulWidget {
 class _SakitState extends State<Sakit> {
   final deskripsiController = TextEditingController();
   final dateController = TextEditingController();
+  String sisaCuti = "0";
 
   List dataFoto = [];
   final ImagePicker _picker = ImagePicker();
@@ -91,6 +92,15 @@ class _SakitState extends State<Sakit> {
             InfoUser(),
             SizedBox(
               height: 20,
+            ),
+            Text(
+                "Sisa absen pada bulan ini: "+sisaCuti,
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                    fontSize: tinggilayar / lebarlayar * 6),
+            ),
+            SizedBox(
+                height: tinggilayar / 40,
             ),
             myContainer(Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,6 +250,7 @@ class _SakitState extends State<Sakit> {
       if (mounted)
         setState(() {
           data = value.data;
+          sisaCuti = data["sisa_cuti"].toString();
           print("data=$data");
         });
     });

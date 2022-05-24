@@ -16,6 +16,7 @@ class Ijin extends StatefulWidget {
 class _IjinState extends State<Ijin> {
   final dateController = TextEditingController();
   final deskripsiController = TextEditingController();
+  String sisaCuti = "0";
 
   Future datepicker() async {
     final DateTime? tgl = await showDatePicker(
@@ -62,6 +63,15 @@ class _IjinState extends State<Ijin> {
             InfoUser(),
             SizedBox(
               height: 20,
+            ),
+            Text(
+                "Sisa absen pada bulan ini: "+sisaCuti,
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                    fontSize: tinggilayar / lebarlayar * 6),
+            ),
+            SizedBox(
+                height: tinggilayar / 40,
             ),
             myContainer(Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,6 +195,7 @@ class _IjinState extends State<Ijin> {
       if (mounted)
         setState(() {
           data = value.data;
+          sisaCuti = data["sisa_cuti"].toString();
           print("data=$data");
         });
     });

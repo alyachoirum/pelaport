@@ -15,6 +15,7 @@ class Cuti extends StatefulWidget {
 class _CutiState extends State<Cuti> {
   final dateController = TextEditingController();
   final deskripsiController = TextEditingController();
+  String sisaCuti = "0";
 
   Future datepicker() async {
     final DateTime? tgl = await showDatePicker(
@@ -61,6 +62,15 @@ class _CutiState extends State<Cuti> {
             InfoUser(),
             SizedBox(
               height: 20,
+            ),
+            Text(
+                "Sisa absen pada bulan ini: "+sisaCuti,
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                    fontSize: tinggilayar / lebarlayar * 6),
+            ),
+            SizedBox(
+                height: tinggilayar / 40,
             ),
             myContainer(Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +149,7 @@ class _CutiState extends State<Cuti> {
       'user_id_penerima':
           data['karyawan']['jabatan']['atasan_1']['user']['id_user'].toString(),
       'tgl_absen': dateController.text,
-      'tipe_absen': "Dispensasi",
+      'tipe_absen': "Cuti",
       'detail_absen': deskripsiController.text,
     };
 
@@ -183,6 +193,7 @@ class _CutiState extends State<Cuti> {
       if (mounted)
         setState(() {
           data = value.data;
+          sisaCuti = data["sisa_cuti"].toString();
           print("data=$data");
         });
     });

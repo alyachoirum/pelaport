@@ -17,6 +17,7 @@ class Lembur extends StatefulWidget {
 class _LemburState extends State<Lembur> {
   final dateController = TextEditingController();
   final deskripsiController = TextEditingController();
+  String sisaLembur = "0";
 
   int _currentHorizontalIntValue = 1;
 
@@ -65,6 +66,15 @@ class _LemburState extends State<Lembur> {
             InfoUser(),
             SizedBox(
               height: 20,
+            ),
+            Text(
+                "Sisa Lembur pada bulan ini: "+sisaLembur+" jam",
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                    fontSize: tinggilayar / lebarlayar * 6),
+            ),
+            SizedBox(
+                height: tinggilayar / 40,
             ),
             label("Total Jam Lembur"),
             SizedBox(
@@ -209,6 +219,7 @@ class _LemburState extends State<Lembur> {
       )
         setState(() {
           data = value.data;
+          sisaLembur = data["sisa_lembur"].toString();
           print("data=$data");
         });
     });

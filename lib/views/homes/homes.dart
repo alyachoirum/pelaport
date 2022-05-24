@@ -239,7 +239,7 @@ class _HomesState extends State<Homes> {
               padding: EdgeInsets.symmetric(horizontal: lebarlayar / 20),
               width: lebarlayar,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     "Laporan Terbaru",
@@ -247,18 +247,18 @@ class _HomesState extends State<Homes> {
                         fontWeight: FontWeight.bold,
                         fontSize: tinggilayar / lebarlayar * 9),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      child: Text(
-                        "Lainnya",
-                        style: TextStyle(
-                            color: primarycolor,
-                            fontSize: tinggilayar / lebarlayar * 8.5),
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     padding: EdgeInsets.all(5),
+                  //     child: Text(
+                  //       "Lainnya",
+                  //       style: TextStyle(
+                  //           color: primarycolor,
+                  //           fontSize: tinggilayar / lebarlayar * 8.5),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
