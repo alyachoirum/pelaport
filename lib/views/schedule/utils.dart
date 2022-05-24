@@ -3,7 +3,9 @@
 
 import 'dart:collection';
 
+// ignore: unused_import
 import 'package:pelaport/apiresponse.dart';
+import 'package:pelaport/models/berita.dart';
 import 'package:pelaport/models/jadwal.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -47,7 +49,8 @@ Future getListJadwal() async{
   Map<String,String> body = {
     'bulan' : kToday.month.toString(),
     'tahun' : kToday.year.toString(),
-    'id_regu' : data['karyawan']['id_regu'].toString()
+    'id_regu' : data['karyawan']['id_regu'].toString(),
+    'nik' : data['karyawan']['nik']
   };
   var _kEvents;
   await ApiController().getJadwal(body).then((value){
@@ -59,7 +62,7 @@ Future getListJadwal() async{
         });
 
         final source = Map.fromIterable(listJadwal,
-          key: (item) => DateTime.utc(item.tahun, item.bulan, item.tanggal),
+          key: (item) => DateTime.utc(int.parse(item.tahun), int.parse(item.bulan), int.parse(item.tanggal)),
           value: (item) => List.generate(1, (index) => Event("|"+item.action+"| "+item.jam_masuk+"-"+item.jam_keluar) )
         );
         print(source);
@@ -87,3 +90,15 @@ List<DateTime> daysInRange(DateTime first, DateTime last) {
 final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
 final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+
+  List<Berita> listBerita = [];
+Future getDataBerita() async{
+  var response = await ApiController().getDataBerita();
+  List<Berita> beritaList = new List.empty(growable: true);
+  var jsonlist = response.data as List;
+  jsonlist.forEach((element) { 
+    beritaList.add(Berita.fromJson(element));
+  });
+  listBerita = beritaList;
+  // return notifikasiList;
+}

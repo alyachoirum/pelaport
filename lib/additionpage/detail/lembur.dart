@@ -1,14 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pelaport/additionpage/detail/presensi.dart';
-import 'package:pelaport/additionpage/pengajuan.dart';
 import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/constant.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../absen.dart';
 
 class Lembur extends StatefulWidget {
   const Lembur({Key? key}) : super(key: key);
@@ -173,16 +170,36 @@ class _LemburState extends State<Lembur> {
 
     print(body);
     await ApiController().lemburSubmit(body).then((response) {
-      var value = response.data;
-      BotToast.closeAllLoading();
-
-      Navigator.pop(context);
-
-      BotToast.showText(
-          text: "Berhasil mengajukan form lembur",
+      if (response.data['success']){
+        BotToast.closeAllLoading();
+        Navigator.pop(context);
+        BotToast.showText(
+          text: response.data['message'].toString(),
           crossPage: true,
           textStyle: TextStyle(fontSize: 14, color: Colors.white),
-          contentColor: Colors.green);
+          contentColor: Colors.green
+      );
+      }else{
+        BotToast.closeAllLoading();
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text(response.data['message'].toString()),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     });
   }
 

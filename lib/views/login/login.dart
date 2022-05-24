@@ -1,9 +1,9 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/views/home/home.dart';
+import 'package:pelaport/views/schedule/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../apicontroller.dart';
@@ -16,12 +16,19 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  @override
-  Widget build(BuildContext context) {
+  TextEditingController _passwordcontroller = new TextEditingController();
+  TextEditingController _nikcontroller = new TextEditingController();
     final _formkey = new GlobalKey<FormFieldState>();
     bool _showpassword = false;
-    TextEditingController _passwordcontroller = new TextEditingController();
-    TextEditingController _nikcontroller = new TextEditingController();
+  
+    void initState() {
+      super.initState();
+      getDataBerita();
+      _showpassword = false;
+    }
+  @override
+  Widget build(BuildContext context) {
+    
     saveToken(token) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token);
@@ -203,6 +210,7 @@ class _LoginState extends State<Login> {
                             child: TextFormField(
                               controller: _nikcontroller,
                               decoration: InputDecoration(labelText: 'NIK'),
+                              
                             ),
                           ),
                           SizedBox(
@@ -213,18 +221,17 @@ class _LoginState extends State<Login> {
                                 horizontal: marginhorizontal),
                             child: TextFormField(
                               controller: _passwordcontroller,
-                              obscureText: _showpassword == true ? false : true,
+                              obscureText: !_showpassword,
                               decoration: InputDecoration(
                                 labelText: 'Password',
-                                // suffixIcon: GestureDetector(
-                                //   onTap: () {setState(() {
-                                //     if(_showpassword==false)
-                                //     _showpassword = true;
-                                //     else
-                                //     _showpassword = false;
-                                //   });},
-                                //   child: Icon(Icons.password)
-                                // ),
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _showpassword = !_showpassword;
+                                    });
+                                  },
+                                  child: Icon(_showpassword ? Icons.visibility : Icons.visibility_off)
+                                ),
                               ),
                             ),
                           ),

@@ -5,11 +5,10 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pelaport/apicontroller.dart';
-import 'package:pelaport/apiresponse.dart';
+// import 'package:pelaport/apiresponse.dart';
 import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/class/public_function.dart';
 import 'package:pelaport/constant.dart';
-import 'package:pelaport/views/home/home.dart';
 import 'package:pelaport/function/route.dart';
 import 'package:pelaport/views/laporan/pencarian_parent.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -26,17 +25,24 @@ class _TambahLaporanState extends State<TambahLaporan> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final judulController = TextEditingController();
+  final dateController = TextEditingController();
   final kategoriController = TextEditingController();
   final prioritasController = TextEditingController();
+  final zonaController = TextEditingController();
   final tanggalController = TextEditingController();
   final lokasiController = TextEditingController();
   final deskripsiController = TextEditingController();
+  final kronologiController = TextEditingController();
+  final akibatController = TextEditingController();
+  final bantuanController = TextEditingController();
   int idKategori = 0;
+  int idZona = 7;
   double lat = 0.0, lng = 0.0;
 
   List dataFoto = [];
   final ImagePicker _picker = ImagePicker();
   List<XFile>? _imageFileList;
+  // ignore: unused_field
   dynamic _pickImageError;
 
   Future getImage() async {
@@ -53,6 +59,18 @@ class _TambahLaporanState extends State<TambahLaporan> {
       setState(() {
         _pickImageError = e;
       });
+    }
+  }
+
+  Future datepicker() async {
+    final DateTime? tgl = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (tgl != null) {
+      dateController.text = tgl.toString().substring(0, 10);
     }
   }
 
@@ -165,7 +183,20 @@ class _TambahLaporanState extends State<TambahLaporan> {
                                 },
                                 gestureNavigationEnabled: true,
                               ),
-                      )
+                      ),
+                      label("Zona"),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      CustomTextFormField(
+                          onTap: getZona,
+                          isDropdown: true,
+                          isRequired: true,
+                          controller: zonaController,
+                          placeholder: "Zona"),
+                      SizedBox(
+                        height: 8,
+                      ),
                     ],
                   )),
                   SizedBox(
@@ -174,16 +205,58 @@ class _TambahLaporanState extends State<TambahLaporan> {
                   myContainer(Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      label("Deskripsi"),
+                      label("Kronologi Kejadian"),
                       SizedBox(
                         height: 4,
                       ),
                       CustomTextFormField(
                         isLongText: true,
-                        controller: deskripsiController,
-                        placeholder: "Masukkan Deskripsi",
+                        controller: kronologiController,
+                        placeholder: "Masukkan Kronologi Kejadian",
                         isRequired: true,
-                      )
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      label("Akibat Kejadian"),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      CustomTextFormField(
+                        isLongText: true,
+                        controller: akibatController,
+                        placeholder: "Masukkan Akibat Kejadian",
+                        isRequired: true,
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      label("Bantuan Pengamanan"),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      CustomTextFormField(
+                        isLongText: true,
+                        controller: bantuanController,
+                        placeholder: "Masukkan Bantuan Pengamanan",
+                        isRequired: true,
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      label("Tanggal Kejadian"),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      CustomTextFormField(
+                        controller: dateController,
+                        isDatePicker: true,
+                        isReadonly: true,
+                        placeholder: "Pilih Tanggal",
+                        isRequired: true,
+                        onTap: datepicker,
+                      ),
+
                     ],
                   )),
                   SizedBox(
@@ -289,45 +362,55 @@ class _TambahLaporanState extends State<TambahLaporan> {
         clickClose: false, allowClick: false, crossPage: false);
 
     Map<String, String> body = {
-      'id_kategori': idKategori.toString(), //int
-      'judul_laporan': judulController.text.toString(), //string
-      'prioritas': prioritasController.text.toString(), //string
-      'deskripsi': deskripsiController.text.toString(), //string
-      'tingkat': dataUser['karyawan']['user']['id_level_user'].toString(),
-      'id_departemen': dataUser['karyawan']['user']['id_departemen'].toString(),
-      'appv1': '',
-      'appv2': '',
-      'appv3': '',
-      'publish': '1',
-      'id_zona': '1',
       'nik': dataUser['karyawan']['nik'].toString(),
+      'id_departemen': dataUser['karyawan']['user']['id_departemen'].toString(),
+      'judul_laporan': judulController.text.toString(), //string
+      'id_kategori': idKategori.toString(), //int
+      'prioritas': prioritasController.text.toString(), //string
       'lat': lat.toString(),
       'lng': lng.toString(),
+      'id_zona': idZona.toString(),
+      'tgl_waktu_kejadian':dateController.text,
+      'kronologi_kejadian' : kronologiController.text,
+      'akibat_kejadian':akibatController.text,
+      'bantuan_pengamanan': bantuanController.text,
       'foto': jsonEncode(fotoBase64)
     };
 
-    // print(dataUser);
-    ApiResponse response =  await ApiController().laporanStore(body);
+    await ApiController().laporanStore(body).then((response) {
 
-    print(response);
-    if(1==1){
-      Navigator.pop(context);
-      BotToast.closeAllLoading();
-      BotToast.showText(
-          text: "Berhasil menambahkan laporan baru",
+      if (response.data['success']){
+        BotToast.closeAllLoading();
+        Navigator.pop(context);
+        BotToast.showText(
+          text: response.data['message'].toString(),
           crossPage: true,
           textStyle: TextStyle(fontSize: 14, color: Colors.white),
-          contentColor: Colors.green);
+          contentColor: Colors.green
+      );
+      }else{
+        BotToast.closeAllLoading();
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text(response.data['message'].toString()),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
 
-    }else{
-      Navigator.pop(context);
-      BotToast.closeAllLoading();
-      BotToast.showText(
-          text: "tidak berhasil Berhasil menambahkan laporan baru",
-          crossPage: true,
-          textStyle: TextStyle(fontSize: 14, color: Colors.white),
-          contentColor: Colors.green);
-    }
   }
 
   Future getKategori() async {
@@ -353,6 +436,21 @@ class _TambahLaporanState extends State<TambahLaporan> {
       if (mounted)
         setState(() {
           prioritasController.text = result;
+        });
+    }
+  }
+
+  Future getZona() async {
+    final result =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return PencarianParent(tipe: "zona");
+    }));
+
+    if (result != null) {
+      if (mounted)
+        setState(() {
+          zonaController.text = result["nama_zona"];
+          idZona = result["id_zona"];
         });
     }
   }

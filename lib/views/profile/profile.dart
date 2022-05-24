@@ -1,11 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pelaport/additionpage/detail/presensi.dart';
-import 'package:pelaport/class/form_component.dart';
+import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
-import 'package:pelaport/home.dart';
+import 'package:pelaport/function/route.dart';
+import 'package:pelaport/models/laporan.dart';
 import 'package:pelaport/my_function.dart';
-import 'package:pelaport/views/home/home.dart';
+import 'package:pelaport/views/home/detail_laporan/detail_laporan.dart';
 import 'package:pelaport/views/login/login.dart';
+// import 'package:pelaport/views/notifikasi/notifikasi.dart';
+import 'package:pelaport/views/profile/edit.dart';
+
+import '../../home.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -17,6 +22,20 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   bool buttongridclicked = false;
   bool buttonlistclicked = true;
+  var data;
+
+  List<Laporan> myLaporan = [];
+  int menunggu = 0;
+  int proses = 0;
+  int selesai = 0;
+
+  @override
+  void initState() {
+    getDataMyLaporan(dataUser['karyawan']['nik']);
+    getStatusLaporan(dataUser['karyawan']['nik']);
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +93,7 @@ class _ProfileState extends State<Profile> {
                                   Text(
                                     dataUser['karyawan']['nama_lengkap'],
                                     style: TextStyle(
-                                        fontSize: tinggilayar / lebarlayar * 7,
+                                        fontSize: tinggilayar / lebarlayar * 6,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
@@ -93,23 +112,78 @@ class _ProfileState extends State<Profile> {
                         SizedBox(
                           height: tinggilayar / 60,
                         ),
-                        Container(
-                          width: lebarlayar / 1.3,
-                          child: Text(
-                            "Nomor Induk Karyawan",
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: "NIK : ",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(
+                                  text: dataUser['karyawan']['nik']
+                                      .toString())
+                            ],
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontFamily: "Poppins",
+                                color: Colors.black,
                                 fontSize: tinggilayar / lebarlayar * 6),
                           ),
                         ),
-                        SizedBox(
-                          height: tinggilayar / 100,
-                        ),
-                        Container(
-                          width: lebarlayar / 1.3,
-                          child: Text(
-                            dataUser['karyawan']['nik'],
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: "Zona : ",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(
+                                  text: dataUser['karyawan']['zona']['nama_zona']
+                                      .toString(),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ))
+                            ],
                             style: TextStyle(
+                                fontFamily: "Poppins",
+                                color: Colors.black,
+                                fontSize: tinggilayar / lebarlayar * 6),
+                          ),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: "Regu : ",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(
+                                  text: dataUser['karyawan']['regu']['nama_regu']
+                                      .toString())
+                            ],
+                            style: TextStyle(
+                                fontFamily: "Poppins",
+                                color: Colors.black,
+                                fontSize: tinggilayar / lebarlayar * 6),
+                          ),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: "Jabatan : ",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(
+                                  text: dataUser['karyawan']['jabatan']
+                                          ['nama_jabatan']
+                                      .toString(),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  )),
+                            ],
+                            style: TextStyle(
+                                fontFamily: "Poppins",
+                                color: Colors.black,
                                 fontSize: tinggilayar / lebarlayar * 6),
                           ),
                         ),
@@ -142,19 +216,19 @@ class _ProfileState extends State<Profile> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // Text(
-                                //   "24",
-                                //   style: TextStyle(
-                                //       fontWeight: FontWeight.bold,
-                                //       color: Colors.white,
-                                //       fontSize: tinggilayar / lebarlayar * 10),
-                                // ),
-                                // Text(
-                                //   "Menunggu",
-                                //   style: TextStyle(
-                                //       color: Colors.white,
-                                //       fontSize: tinggilayar / lebarlayar * 5),
-                                // )
+                                Text(
+                                  menunggu.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: tinggilayar / lebarlayar * 7),
+                                ),
+                                Text(
+                                  "Menunggu",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: tinggilayar / lebarlayar * 5),
+                                )
                               ],
                             ),
                           ),
@@ -164,19 +238,19 @@ class _ProfileState extends State<Profile> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // Text(
-                                //   "12",
-                                //   style: TextStyle(
-                                //       fontWeight: FontWeight.bold,
-                                //       color: Colors.white,
-                                //       fontSize: tinggilayar / lebarlayar * 10),
-                                // ),
-                                // Text(
-                                //   "Proses",
-                                //   style: TextStyle(
-                                //       color: Colors.white,
-                                //       fontSize: tinggilayar / lebarlayar * 5),
-                                // )
+                                Text(
+                                  proses.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: tinggilayar / lebarlayar * 7),
+                                ),
+                                Text(
+                                  "Proses",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: tinggilayar / lebarlayar * 5),
+                                )
                               ],
                             ),
                           ),
@@ -186,28 +260,28 @@ class _ProfileState extends State<Profile> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // Text(
-                                //   "21",
-                                //   style: TextStyle(
-                                //       fontWeight: FontWeight.bold,
-                                //       color: Colors.white,
-                                //       fontSize: tinggilayar / lebarlayar * 10),
-                                // ),
-                                // Text(
-                                //   "Selesai",
-                                //   style: TextStyle(
-                                //       color: Colors.white,
-                                //       fontSize: tinggilayar / lebarlayar * 5),
-                                // )
+                                Text(
+                                  selesai.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: tinggilayar / lebarlayar * 7),
+                                ),
+                                Text(
+                                  "Selesai",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: tinggilayar / lebarlayar * 5),
+                                )
                               ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                    height: tinggilayar / 10,
+                    height: tinggilayar / 12,
                     width: lebarlayar / 1.7,
-                    margin: EdgeInsets.symmetric(vertical: tinggilayar / 3.4),
+                    margin: EdgeInsets.symmetric(vertical: tinggilayar / 3.1),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24),
                         color: primarycolor),
@@ -225,135 +299,217 @@ class _ProfileState extends State<Profile> {
                       },
                       child: Icon(Icons.exit_to_app)),
                 ),
+                
+                Positioned(
+                  left:32,child:IconButton(
+                  onPressed: (){
+                      //action coe when button is pressed
+                      pindahPageCupertino(context, Edit());
+                  }, 
+                  icon: Icon(Icons.edit,color: primarycolor,),
+                )),
 
-                // SizedBox.expand(
-                //   child: DraggableScrollableSheet(
-                //     initialChildSize: 0.5,
-                //     minChildSize: 0.5,
-                //     maxChildSize: 1,
-                //     builder: (BuildContext context, listController) {
-                //       return Container(
-                //         decoration: BoxDecoration(
-                //           color: Colors.white,
-                //           borderRadius: BorderRadius.only(
-                //             topLeft: Radius.circular(40),
-                //             topRight: Radius.circular(40),
-                //           ),
-                //         ),
-                //         child: ListView(
-                //           padding: EdgeInsets.only(bottom: tinggilayar / 15),
-                //           // padding: EdgeInsets.symmetric(),
-                //           controller: listController,
-                //           children: [
-                //             SizedBox(
-                //               height: tinggilayar / 80,
-                //             ),
-                //             Container(
-                //               margin: EdgeInsets.symmetric(
-                //                   horizontal: lebarlayar / 3),
-                //               color: Colors.grey,
-                //               height: 5,
-                //             ),
-                //             SizedBox(
-                //               height: tinggilayar / 30,
-                //             ),
-                //             Container(
-                //               padding: EdgeInsets.symmetric(
-                //                   horizontal: lebarlayar / 30),
-                //               child: Row(
-                //                 mainAxisAlignment:
-                //                     MainAxisAlignment.spaceBetween,
-                //                 children: [
-                //                   Container(
-                //                     width: lebarlayar / 3,
-                //                     child: Text(
-                //                       "Laporan Saya",
-                //                       style: TextStyle(
-                //                           fontSize:
-                //                               tinggilayar / lebarlayar * 7),
-                //                     ),
-                //                   ),
-                //                   Row(
-                //                     children: [
-                //                       GestureDetector(
-                //                           onTap: () {
-                //                             setState(() {
-                //                               buttongridclicked = true;
-                //                               buttonlistclicked = false;
-                //                             });
-                //                           },
-                //                           child: Icon(Icons.grid_view)),
-                //                       SizedBox(
-                //                         width: lebarlayar / 50,
-                //                       ),
-                //                       GestureDetector(
-                //                           onTap: () {
-                //                             setState(
-                //                               () {
-                //                                 buttongridclicked = false;
-                //                                 buttonlistclicked = true;
-                //                               },
-                //                             );
-                //                           },
-                //                           child: Icon(Icons.list_rounded)),
-                //                     ],
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //             SizedBox(
-                //               height: tinggilayar / 40,
-                //             ),
-                //             if (buttonlistclicked == true)
-                //               for (var i = 0; i < 20; i++)
-                //                 CardWithImage(
-                //                   index: i.toString(),
-                //                   title: "Ini Laporan",
-                //                   deskripsi:
-                //                       "Lorem ipsum dolor sit amet saf ardcf adfsds tufjedw dsdsd dsahdda shauhsau sbhausha suasu",
-                //                   publisher: "Admin",
-                //                   image:
-                //                       "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-                //                 )
-                //             else
-                //               Container(
-                //                 padding: EdgeInsets.symmetric(
-                //                     horizontal: lebarlayar / 30),
-                //                 height: tinggilayar / 1,
-                //                 child: GridView.builder(
-                //                   gridDelegate:
-                //                       SliverGridDelegateWithMaxCrossAxisExtent(
-                //                           maxCrossAxisExtent: 200,
-                //                           childAspectRatio: 2 / 2,
-                //                           crossAxisSpacing: 20,
-                //                           mainAxisSpacing: 20),
-                //                   itemBuilder: (context, indext) {
-                //                     return Container(
-                //                       decoration: BoxDecoration(
-                //                           borderRadius:
-                //                               BorderRadius.circular(10)),
-                //                       child: ClipRRect(
-                //                         borderRadius: BorderRadius.circular(20),
-                //                         child: Image.network(
-                //                           "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-                //                           fit: BoxFit.cover,
-                //                         ),
-                //                       ),
-                //                     );
-                //                   },
-                //                 ),
-                //               )
-                //           ],
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // ),
+                SizedBox.expand(
+                  child: DraggableScrollableSheet(
+                    initialChildSize: 0.5,
+                    minChildSize: 0.5,
+                    maxChildSize: 1,
+                    builder: (BuildContext context, listController) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),
+                          ),
+                        ),
+                        child: ListView(
+                          padding: EdgeInsets.only(bottom: tinggilayar / 15),
+                          // padding: EdgeInsets.symmetric(),
+                          controller: listController,
+                          children: [
+                            SizedBox(
+                              height: tinggilayar / 80,
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: lebarlayar / 3),
+                              color: Colors.grey,
+                              height: 5,
+                            ),
+                            SizedBox(
+                              height: tinggilayar / 30,
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: lebarlayar / 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width: lebarlayar / 3,
+                                    child: Text(
+                                      "Laporan Saya",
+                                      style: TextStyle(
+                                          fontSize:
+                                              tinggilayar / lebarlayar * 6),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              buttongridclicked = true;
+                                              buttonlistclicked = false;
+                                            });
+                                          },
+                                          child: Icon(Icons.grid_view)),
+                                      SizedBox(
+                                        width: lebarlayar / 50,
+                                      ),
+                                      GestureDetector(
+                                          onTap: () {
+                                            setState(
+                                              () {
+                                                buttongridclicked = false;
+                                                buttonlistclicked = true;
+                                              },
+                                            );
+                                          },
+                                          child: Icon(Icons.list_rounded)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: tinggilayar / 40,
+                            ),
+                            if (buttonlistclicked == true)
+                              if(myLaporan.length > 0)
+                                for (var i = 0; i < myLaporan.length; i++)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (BuildContext) =>
+                                                  DetailLaporan(index: i,laporan: myLaporan[i],)));
+                                    },
+                                    child:CardWithImage(
+                                      index: i.toString(),
+                                      title: myLaporan[i].judul_laporan,
+                                      deskripsi:
+                                          myLaporan[i].kronologi_kejadian,
+                                      publisher: "Admin",
+                                      image:
+                                          myLaporan[i].link_foto,
+                                    ),
+                                  )
+                              else
+                                Center(
+                                  child: Text(
+                                    "Anda belum pernah membuat laporan",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize:
+                                              tinggilayar / lebarlayar * 6,
+                                              color: Colors.grey),),
+                                  )
+                            else
+                              if(myLaporan.length > 0)
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: lebarlayar / 30),
+                                  height: tinggilayar / 1,
+                                  child: GridView.builder(
+                                    gridDelegate:
+                                        SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 200,
+                                            childAspectRatio: 2 / 2,
+                                            crossAxisSpacing: 20,
+                                            mainAxisSpacing: 20),
+                                    itemCount: myLaporan.length,
+                                    itemBuilder: (context, indext) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                  builder: (BuildContext) =>
+                                                      DetailLaporan(index: indext,laporan: myLaporan[indext],)));
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(20),
+                                            child: Image.network(
+                                              myLaporan[indext].link_foto,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              else
+                                Center(
+                                    child: Text(
+                                      "Anda belum pernah membuat laporan",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize:
+                                                tinggilayar / lebarlayar * 6,
+                                                color: Colors.grey),),
+                                    )
+
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future getDataMyLaporan(String nik) async{
+
+    Map<String,String> body = {
+      'nik' : nik
+    };
+    var response = await ApiController().getDataMyLaporan(body);
+    List<Laporan> laporanList = new List.empty(growable: true);
+    var jsonlist = response.data as List;
+    print(jsonlist);
+    jsonlist.forEach((element) { 
+      laporanList.add(Laporan.fromJson(element));
+    });
+    print(laporanList);
+    setState(() {
+      myLaporan = laporanList;
+    });
+  }
+  Future getStatusLaporan(String nik) async{
+
+    Map<String,String> body = {
+      'nik' : nik
+    };
+    var response = await ApiController().getStatusLaporan(body);
+    if(response.status){
+
+      setState(() {
+        menunggu = response.data['menunggu'];
+        proses = response.data['proses'];
+        selesai = response.data['selesai'];
+      });
+    }
   }
 }

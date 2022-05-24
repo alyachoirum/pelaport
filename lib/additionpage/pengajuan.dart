@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pelaport/additionpage/detail/lemburKhusus.dart';
 import 'package:pelaport/additionpage/kehadiran.dart';
 import 'package:pelaport/constant.dart';
-import 'package:pelaport/additionpage/detail/tukarshift.dart';
 import 'package:pelaport/additionpage/detail/lembur.dart';
 import 'package:pelaport/function/route.dart';
 import 'package:pelaport/my_function.dart';

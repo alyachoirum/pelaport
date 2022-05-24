@@ -11,12 +11,12 @@ import 'package:pelaport/views/homes/homes.dart';
 import 'package:pelaport/additionpage/kehadiran.dart';
 import 'package:pelaport/views/home/widget/tab.dart';
 import 'package:pelaport/views/laporan/tambah.dart';
-import 'package:pelaport/views/notifikasi/notifikasi.dart';
 import 'package:pelaport/views/list_data/list_data.dart';
 import 'package:pelaport/views/profile/profile.dart';
 import 'package:pelaport/views/schedule/schedule.dart';
+// import 'package:pelaport/views/schedule/utils.dart';
 
-import '../../my_function.dart';
+// import '../../my_function.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -26,6 +26,9 @@ class MainScreen extends StatefulWidget {
 final tabs = ['Home', 'Jadwal', 'Data', 'Profile'];
 
 class _MainScreenState extends State<MainScreen> {
+
+  
+  
   bool exit2 = false;
   int selectedPosition = 0;
   List<Widget> listWidget = [

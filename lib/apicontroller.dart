@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -8,13 +10,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:pelaport/apiresponse.dart';
-import 'dart:io';
 
 class ApiController {
   late Response response;
   var dio = Dio();
 
-  Future connection({String method = "get",String path = "" ,var parameter = null, Map<String, String>? body}) async {
+  Future connection({String method = "get",String path = "" ,var parameter , Map<String, String>? body}) async {
     Uri url;
     BotToast.showLoading();
     // if (protokol == 'https://')
@@ -35,8 +36,9 @@ class ApiController {
         }else{
           print(res.body);
           print(url);
+          var data = jsonDecode(res.body);
           BotToast.closeAllLoading();
-          return ApiResponse<String>(false, message: "tidak bisa daftar");
+          return ApiResponse<dynamic>(false, message: "tidak bisa daftar",data: data);
         }
 
       }catch($e){
@@ -49,7 +51,7 @@ class ApiController {
       print(res.body);
       try{
         if(res.statusCode == StatusCode.OK ){
-          print("iki;lo");
+          // print("iki;lo");
           var data = jsonDecode(res.body);
           BotToast.closeAllLoading();
           return ApiResponse<dynamic>(true, data:data);
@@ -63,8 +65,13 @@ class ApiController {
           print("padahal iki");
           return ApiResponse<dynamic>(false, data:data);
         }else{
+          print(res.body);
+          print(url);
+          var data = jsonDecode(res.body);
           BotToast.closeAllLoading();
-          return ApiResponse<String>(false, message: "tidak bisa daftar");
+          return ApiResponse<dynamic>(false, message: "tidak bisa daftar",data: data);
+          // BotToast.closeAllLoading();
+          // return ApiResponse<String>(false, message: "tidak bisa daftar");
         }
 
       }catch($e){
@@ -74,7 +81,7 @@ class ApiController {
       }
     }
 
-    return res;
+    
   }
 
   Future pencarianParent() async {
@@ -102,12 +109,19 @@ class ApiController {
     return await connection(method: 'get', path: 'user/get_user',parameter: {'id_karyawan': idKar, 'id_regu': idregu});
   }
 
+  Future changePassword(Map<String, String> body) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var nik = prefs.getString('nik');
+    body['nik'] = nik.toString();
+    return await connection(
+        method: 'post', path: "user/change_password", body: body);
+  }
+
   Future checkin(var body) async {
     return await connection(method: 'post',path: 'user/checkin', body: body);
   }
 
   Future checkout({required String id_presensi}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var body = {'id_presensi': id_presensi};
 
@@ -118,11 +132,7 @@ class ApiController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var nik = prefs.getString('nik');
     return await connection(method: 'post',path: 'user/checklist_jammasuk',parameter:{'nik':nik.toString()});
-    response = await dio.post(
-        protokol + baseUrl + '/api/user/checklist_jammasuk',
-        queryParameters: {'nik': nik});
-    print("jam ${response.data}");
-    return response.data;
+
     // return await connection(
     //     method: "get", path: "user/get_user?id_karyawan=447&id_regu=2");
   }
@@ -182,6 +192,27 @@ class ApiController {
 
   Future getDataAbsen(Map<String, String> body) async{
     return await connection(method: 'get',path: "user/list_absen",parameter: body);
+  }
+  Future getDataLembur(Map<String, String> body) async{
+    return await connection(method: 'get',path: "user/list_lembur",parameter: body);
+  }
+  Future getDataLemburKhusus(Map<String, String> body) async{
+    return await connection(method: 'get',path: "user/list_lembur_khusus",parameter: body);
+  }
+  Future getDataNotifikasi(Map<String, String> body) async{
+    return await connection(method: 'get',path: "user/notifikasi",parameter: body);
+  }
+  Future getDataMyLaporan(Map<String, String> body) async{
+    return await connection(method: 'get',path: "laporan/by_user",parameter: body);
+  }
+  Future getDataAllLaporan() async{
+    return await connection(method: 'get',path: "laporan/all");
+  }
+  Future getStatusLaporan(Map<String, String> body) async{
+    return await connection(method: 'get',path: "laporan/status",parameter: body);
+  }
+  Future getDataBerita() async{
+    return await connection(method: 'get',path: "berita");
   }
 
   Future<Position> getCurrentLocation() async {

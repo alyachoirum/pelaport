@@ -5,7 +5,6 @@ import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/constant.dart';
 
-import '../absen.dart';
 
 class Ijin extends StatefulWidget {
   const Ijin({Key? key}) : super(key: key);
@@ -107,6 +106,7 @@ class _IjinState extends State<Ijin> {
             PrimaryButton(
               warna: Colors.white,
               onClick: () {
+                
                 save();
               },
               teksnya: 'K I R I M',
@@ -147,15 +147,36 @@ class _IjinState extends State<Ijin> {
 
     print(body);
     await ApiController().ijinSubmit(body).then((response) {
-      var value = response.data;
-      BotToast.closeAllLoading();
-      Navigator.pop(context);
-
-      BotToast.showText(
-          text: "Berhasil mengajukan form ijin",
+      if (response.data['success']){
+        BotToast.closeAllLoading();
+        Navigator.pop(context);
+        BotToast.showText(
+          text: response.data['message'].toString(),
           crossPage: true,
           textStyle: TextStyle(fontSize: 14, color: Colors.white),
-          contentColor: Colors.green);
+          contentColor: Colors.green
+      );
+      }else{
+        BotToast.closeAllLoading();
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text(response.data['message'].toString()),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     });
   }
 

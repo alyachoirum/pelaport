@@ -1,17 +1,18 @@
+
 import 'package:flutter/material.dart';
-import 'package:pelaport/additionpage/list_data_detail/list_presensi_detail.dart';
+import 'package:pelaport/additionpage/list_data_detail/list_lembur_khusus_detail.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/function/route.dart';
 import 'package:pelaport/my_function.dart';
 
-class ListPresensi extends StatefulWidget {
-  const ListPresensi({Key? key}) : super(key: key);
+class ListLemburKhusus extends StatefulWidget {
+  const ListLemburKhusus({Key? key}) : super(key: key);
 
   @override
-  _ListPresensiState createState() => _ListPresensiState();
+  _ListLemburKhususState createState() => _ListLemburKhususState();
 }
 
-class _ListPresensiState extends State<ListPresensi> {
+class _ListLemburKhususState extends State<ListLemburKhusus> {
   String _nik = '';
   Map<int,String> bulan = {
     1:'Januari',
@@ -27,9 +28,13 @@ class _ListPresensiState extends State<ListPresensi> {
     11:'November',
     12:'Desember'
   };
+  Map<int,String> tipe = {
+    0:'Belum Validasi',
+    1:'Sudah Validasi',
+    2:'Ditolak',
+  };
   @override
   void initState() {
-    
     super.initState();
 
     init();
@@ -54,7 +59,7 @@ class _ListPresensiState extends State<ListPresensi> {
           backgroundColor: secondarycolor,
           elevation: 0,
           title: Text(
-            "List Presensi",
+            "List LemburKhusus",
             style:
                 TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold),
           ),
@@ -65,12 +70,12 @@ class _ListPresensiState extends State<ListPresensi> {
             mainAxisAlignment: MainAxisAlignment.start,
             direction: Axis.vertical,
             children: [
-              for(int i=1;i <= bulan.length;i++) 
+              for(int i=0;i < tipe.length;i++) 
                 LitleCardFunction(
                   fungsi: (){
-                    pindahPageCupertino(context, ListPresensiDetail(bulan:i.toString(),nik:_nik.toString(),judul: "Presensi Bulan "+bulan[i].toString(),));
+                    pindahPageCupertino(context, ListLemburKhususDetail(tipe:i.toString(),nik:_nik.toString(),judul: "Lembur Khusus yang"+tipe[i].toString(),));
                   }, 
-                  judul: bulan[i].toString()
+                  judul: tipe[i].toString()
                 ),
               
             ],
@@ -136,4 +141,3 @@ class LitleCardFunction extends StatelessWidget {
     );
   }
 }
-

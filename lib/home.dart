@@ -1,9 +1,11 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: non_constant_identifier_names
+
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/function/route.dart';
 import 'package:pelaport/views/home/detail_laporan/detail_laporan.dart';
-import 'package:pelaport/views/home/detail_pengumuman/detail_pengumuman.dart';
+// import 'package:pelaport/views/home/detail_pengumuman/detail_pengumuman.dart';
 
 class Homes extends StatefulWidget {
   Homes({Key? key}) : super(key: key);
@@ -30,7 +32,7 @@ class _HomesState extends State<Homes> {
                     fontSize: tinggilayar / lebarlayar * 9),
                 children: [
                   TextSpan(
-                      text: 'Hi ', style: TextStyle(color: Colors.black26)),
+                      text: 'His ', style: TextStyle(color: Colors.black26)),
                   TextSpan(
                       text: dataUser['karyawan']['nama_lengkap'],
                       style: TextStyle(
@@ -53,11 +55,11 @@ class _HomesState extends State<Homes> {
                 itemBuilder: (context, i) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (BuildContext) =>
-                                  DetailPengumuman(index: i)));
+                      // Navigator.push(
+                      //     context,
+                      //     CupertinoPageRoute(
+                      //         builder: (BuildContext) =>
+                      //             DetailPengumuman(index: i)));
                     },
                     child: Container(
                       child: Column(
@@ -124,7 +126,7 @@ class _HomesState extends State<Homes> {
                     ),
                   );
                 },
-                scrollDirection: Axis.horizontal,
+                // scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.only(
                     left: lebarlayar / 20, bottom: tinggilayar / 50),
               ),
@@ -162,13 +164,13 @@ class _HomesState extends State<Homes> {
             Container(
               height: tinggilayar / 2,
               child: ListView.builder(
-                  scrollDirection: Axis.vertical,
+                  // scrollDirection: Axis.vertical,
                   padding: EdgeInsets.only(bottom: tinggilayar / 15),
                   itemCount: 6,
                   itemBuilder: (context, i) {
                     return GestureDetector(
                       onTap: () {
-                        pindahPageCupertino(context, DetailLaporan(index: i));
+                        // pindahPageCupertino(context, DetailLaporan(index: i));
                       },
                       child: CardWithImage(
                         index: i.toString(),

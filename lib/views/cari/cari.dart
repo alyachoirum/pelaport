@@ -24,7 +24,7 @@ class _CariState extends State<Cari> {
   @override
   Widget build(BuildContext context) {
     final List<Map> kategori = List.generate(
-        10, (index) => {"id": index, "kategori": "Kategori ${index}"});
+        10, (index) => {"id": index, "kategori": "Kategori $index"});
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -139,8 +139,8 @@ class _CariState extends State<Cari> {
                           itemBuilder: (context, i) {
                             return GestureDetector(
                               onTap: () {
-                                pindahPageCupertino(
-                                    context, DetailLaporan(index: i));
+                                // pindahPageCupertino(
+                                //     context, DetailLaporan(index: i));
                               },
                               child: CardWithImage(
                                 index: i.toString(),

@@ -42,8 +42,6 @@ class _AbsenState extends State<Absen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Flexible(
-          child: SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: marginhorizontal),
               child: Column(
@@ -107,8 +105,7 @@ class _AbsenState extends State<Absen> {
                 ],
               ),
             ),
-          ),
-        ),
+
       ),
     );
   }

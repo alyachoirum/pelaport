@@ -1,11 +1,9 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:pelaport/additionpage/list_data_detail/list_absen.dart';
+import 'package:pelaport/additionpage/list_data_detail/list_lembur.dart';
 import 'package:pelaport/additionpage/list_data_detail/list_presensi.dart';
-import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/function/route.dart';
-import 'package:pelaport/my_function.dart';
 
 class ListData extends StatefulWidget {
   const ListData({Key? key}) : super(key: key);
@@ -22,8 +20,7 @@ class _ListDataState extends State<ListData> {
         title: Text('List Data'),
       ),
       body: SingleChildScrollView(
-        child: Flexible(
-          child: SafeArea(
+        
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: marginhorizontal),
               child: Column(
@@ -67,7 +64,8 @@ class _ListDataState extends State<ListData> {
                       fit: BoxFit.cover,
                     ),
                     fungsi: () {
-                      MyFunction().belumTersedia();
+                      pindahPageCupertino(context, ListLembur());
+                      // MyFunction().belumTersedia();
                     },
                     judul: "List Lembur",
                     deskripsi: "Ini Deksripsi",
@@ -81,7 +79,8 @@ class _ListDataState extends State<ListData> {
                       fit: BoxFit.cover,
                     ),
                     fungsi: () {
-                      MyFunction().belumTersedia();
+                      pindahPageCupertino(context, ListLembur());
+                      // MyFunction().belumTersedia();
                     },
                     judul: "List Lembur Khusus",
                     deskripsi: "Ini Deksripsi",
@@ -92,8 +91,7 @@ class _ListDataState extends State<ListData> {
                 ],
               ),
             ),
-          ),
-        ),
+
       ),
     );
   }

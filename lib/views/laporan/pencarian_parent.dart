@@ -28,14 +28,22 @@ class _PencarianParentState extends State<PencarianParent> {
       body: ListView.builder(
           itemCount: data.length,
           itemBuilder: (context, i) {
-            return widget.tipe == "kategori"
-                ? ListTile(
-                    title: Text(data[i]['nama_kategori']),
-                    onTap: () {
-                      Navigator.pop(context, data[i]);
-                    },
-                  )
-                : ListTile(
+            if(widget.tipe == "kategori"){
+              return ListTile(
+                title: Text(data[i]['nama_kategori']),
+                onTap: () {
+                  Navigator.pop(context, data[i]);
+                },
+              );
+            }else if(widget.tipe == "zona"){
+              return ListTile(
+                title: Text(data[i]['nama_zona']),
+                onTap: () {
+                  Navigator.pop(context, data[i]);
+                },
+              );
+            }
+            return ListTile(
                     title: Text(data[i]),
                     onTap: () {
                       Navigator.pop(context, data[i]);

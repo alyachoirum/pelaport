@@ -5,7 +5,7 @@ import 'package:pelaport/constant.dart';
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? placeholder;
-  final bool isRequired, isReadonly, isDropdown, isLongText, isDatePicker;
+  final bool isRequired, isReadonly, isDropdown, isLongText, isDatePicker,isObsecureText;
   final Function()? onTap;
 
   const CustomTextFormField(
@@ -17,7 +17,8 @@ class CustomTextFormField extends StatelessWidget {
       this.isDropdown = false,
       this.onTap,
       this.isLongText = false,
-      this.isDatePicker = false})
+      this.isDatePicker = false,
+      this.isObsecureText = false})
       : super(key: key);
 
   @override
@@ -34,6 +35,7 @@ class CustomTextFormField extends StatelessWidget {
         return null;
       },
       minLines: isLongText ? 4 : null,
+      // obscureText: isObsecureText,
       maxLines: isLongText ? 4 : null,
       decoration: InputDecoration(
         suffixIcon: isDropdown

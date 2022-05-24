@@ -4,28 +4,28 @@ import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/my_function.dart';
 
-class ListAbsenDetail extends StatefulWidget {
+class ListLemburDetail extends StatefulWidget {
   final String tipe;
   final String nik;
   final String judul;
-  const ListAbsenDetail({Key? key, required this.tipe,required this.nik,required this.judul}) : super(key: key);
+  const ListLemburDetail({Key? key, required this.tipe,required this.nik,required this.judul}) : super(key: key);
 
   @override
-  _ListAbsenDetailState createState() => _ListAbsenDetailState();
+  _ListLemburDetailState createState() => _ListLemburDetailState();
 }
 
-class _ListAbsenDetailState extends State<ListAbsenDetail> {
+class _ListLemburDetailState extends State<ListLemburDetail> {
   // ignore: unused_field
   String _nik = '';
   // ignore: unused_field
   String _tipe = '0';
   String _judul = '';
   int position = 1 ;
-  List<dynamic> _dataAbsen = [];
+  List<dynamic> _dataLembur = [];
   @override
   void initState() {
     // init();
-    _getDataAbsen(widget.tipe.toString(),widget.nik);
+    _getDataLembur(widget.tipe.toString(),widget.nik);
     _tipe = widget.tipe;
     _nik = widget.nik;
     _judul = widget.judul;
@@ -51,7 +51,7 @@ class _ListAbsenDetailState extends State<ListAbsenDetail> {
           backgroundColor: secondarycolor,
           elevation: 0,
           title: Text(
-            "List Absen",
+            "List Lembur",
             style:
                 TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold),
           ),
@@ -82,24 +82,22 @@ class _ListAbsenDetailState extends State<ListAbsenDetail> {
   List<DataColumn> _createColumns() {
     return [
       DataColumn(label: Text('No')),
-      DataColumn(label: Text('Tgl Absen')),
+      DataColumn(label: Text('Tgl Lembur')),
       DataColumn(label: Text('NIK')),
       DataColumn(label: Text('Nama')),
-      DataColumn(label: Text('Tipe Absen')),
       DataColumn(label: Text('Kajaga')),
     ];
   }
   List<DataRow> _createRows() {
-    if(_dataAbsen.length > 0){
+    if(_dataLembur.length > 0){
     int num = 0;
-    return _dataAbsen.map((data){
+    return _dataLembur.map((data){
             num++;
             return DataRow(cells: [
               DataCell(Text(num.toString())),
-              DataCell(Text(data['tgl_absen'].toString())),
+              DataCell(Text(data['tgl_lembur'].toString())),
               DataCell(Text(data['nik'])),
               DataCell(Text(data['karyawan']['nama_lengkap'])),
-              DataCell(Text(data['tipe_absen'])),
               DataCell(Text(""))
             ]);
             }
@@ -109,7 +107,6 @@ class _ListAbsenDetailState extends State<ListAbsenDetail> {
       return [
       DataRow(cells: [
         DataCell(Text('Data Tidak ada')),
-        DataCell(Text('')),
         DataCell(Text('')),
         DataCell(Text('')),
         DataCell(Text('')),
@@ -127,17 +124,17 @@ class _ListAbsenDetailState extends State<ListAbsenDetail> {
     });
   }
 
-  Future _getDataAbsen(String tipe, String nik) async{
+  Future _getDataLembur(String tipe, String nik) async{
     Map<String,String> body = {
       'tipe' : tipe,
       'nik' : nik
     };
-    var response = await ApiController().getDataAbsen(body);
+    var response = await ApiController().getDataLembur(body);
     if(response.status){
       if(response.data.length > 0){
         // print(response.data.isList);
         setState(() {
-          _dataAbsen = response.data;
+          _dataLembur = response.data;
         });
       }
     }

@@ -19,6 +19,7 @@ class _PresensiKeluarState extends State<PresensiKeluar> {
 
   String jammasuk = "";
 
+  // ignore: non_constant_identifier_names
   String id_presensi = "";
 
   @override

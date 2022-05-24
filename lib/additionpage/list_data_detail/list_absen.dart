@@ -1,17 +1,9 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
-import 'package:pelaport/additionpage/detail/presensi.dart';
-import 'package:pelaport/additionpage/detail/presensiKeluar.dart';
-import 'package:pelaport/additionpage/kehadiran.dart';
 import 'package:pelaport/additionpage/list_data_detail/list_absen_detail.dart';
-import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/function/route.dart';
 import 'package:pelaport/my_function.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class ListAbsen extends StatefulWidget {
   const ListAbsen({Key? key}) : super(key: key);
@@ -43,7 +35,6 @@ class _ListAbsenState extends State<ListAbsen> {
   };
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     init();
@@ -82,7 +73,7 @@ class _ListAbsenState extends State<ListAbsen> {
               for(int i=0;i < tipe.length;i++) 
                 LitleCardFunction(
                   fungsi: (){
-                    pindahPageCupertino(context, ListAbsenDetail(tipe:i.toString(),nik:_nik.toString(),judul: "Presensi Bulan "+tipe[i].toString(),));
+                    pindahPageCupertino(context, ListAbsenDetail(tipe:i.toString(),nik:_nik.toString(),judul: "Absen yang "+tipe[i].toString(),));
                   }, 
                   judul: tipe[i].toString()
                 ),
@@ -115,6 +106,7 @@ class LitleCardFunction extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
+        margin: const EdgeInsets.only(bottom: 10.0),
         padding: EdgeInsets.symmetric(horizontal: marginhorizontal),
         height: tinggilayar/12,
         decoration: BoxDecoration(

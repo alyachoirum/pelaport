@@ -3,17 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
-import 'package:pelaport/home.dart';
 import 'package:pelaport/introslider.dart';
 import 'package:pelaport/my_function.dart';
 import 'package:pelaport/views/home/home.dart';
-import 'package:pelaport/views/login/login.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-bool _login = false;
+// bool _login = false;
 void main() async {
+  
   runApp(MyApp());
 }
 
@@ -51,7 +48,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  int _counter = 0;
+  // int _counter = 0;
 
   @override
   void initState() {

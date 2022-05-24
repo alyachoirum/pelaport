@@ -18,7 +18,6 @@ class _KehadiranState extends State<Kehadiran> {
   bool cekIn = false, cekOut = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     init();

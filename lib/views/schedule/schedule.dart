@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pelaport/apicontroller.dart';
-import 'package:pelaport/models/jadwal.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 import 'utils.dart';
@@ -137,8 +135,6 @@ class _ScheduleState extends State<Schedule> {
             child: ValueListenableBuilder<List<Event>>(
               valueListenable: _selectedEvents,
               builder: (context, value, _) {
-                // print("ini value");
-                // print(value);
                 return ListView.builder(
                   itemCount: value.length,
                   itemBuilder: (context, index) {

@@ -6,16 +6,21 @@ import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/constant.dart';
 
 
-class Dispensasi extends StatefulWidget {
-  const Dispensasi({Key? key}) : super(key: key);
+class Edit extends StatefulWidget {
+  const Edit({Key? key}) : super(key: key);
 
   @override
-  _DispensasiState createState() => _DispensasiState();
+  _EditState createState() => _EditState();
 }
 
-class _DispensasiState extends State<Dispensasi> {
+class _EditState extends State<Edit> {
   final dateController = TextEditingController();
   final deskripsiController = TextEditingController();
+   final formKey = GlobalKey<FormState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final passwordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final newConfirmPasswordController = TextEditingController();
 
   Future datepicker() async {
     final DateTime? tgl = await showDatePicker(
@@ -52,7 +57,7 @@ class _DispensasiState extends State<Dispensasi> {
           ),
         ),
         title: Text(
-          "Form Dispensasi",
+          "Edit Profil",
           style: TextStyle(color: primarycolor, fontWeight: FontWeight.bold),
         ),
       ),
@@ -61,51 +66,79 @@ class _DispensasiState extends State<Dispensasi> {
           children: [
             InfoUser(),
             SizedBox(
-              height: 20,
+              height: 10,
+            ),
+            Text(
+                    "Ganti Password Akun",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: primarycolor,
+                        fontSize: tinggilayar / lebarlayar * 8),
+                  ),
+                  SizedBox(
+              height: 10,
             ),
             myContainer(Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                label("Tanggal Dispensasi"),
+                label("Password Lama"),
                 SizedBox(
                   height: 4,
                 ),
                 CustomTextFormField(
-                  controller: dateController,
-                  isDatePicker: true,
-                  isReadonly: true,
-                  placeholder: "Pilih Tanggal",
+                  isObsecureText: true,
+                  controller: passwordController,
+                  placeholder: "Masukkan Password lama",
                   isRequired: true,
-                  onTap: datepicker,
                 )
               ],
             )),
             SizedBox(
               height: 16,
             ),
-            myContainer(
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  label("Deskripsi"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CustomTextFormField(
-                    isLongText: true,
-                    controller: deskripsiController,
-                    placeholder: "Masukkan Deskripsi",
-                    isRequired: true,
-                  )
-                ],
-              ),
-            ),
+            myContainer(Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                label("Password Baru"),
+                SizedBox(
+                  height: 4,
+                ),
+                CustomTextFormField(
+                  isObsecureText: true,
+                  controller: newPasswordController,
+                  placeholder: "Masukkan Password baru",
+                  isRequired: true,
+                )
+              ],
+            )),
             SizedBox(
-              height: 32,
+              height: 16,
+            ),
+            myContainer(Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                label("Konfirmasi Password Baru"),
+                SizedBox(
+                  height: 4,
+                ),
+                CustomTextFormField(
+                  isObsecureText: true,
+                  controller: newConfirmPasswordController,
+                  placeholder: "Masukkan Password baru",
+                  isRequired: true,
+                )
+              ],
+            )),
+            SizedBox(
+              height: 16,
             ),
             PrimaryButton(
               warna: Colors.white,
               onClick: () {
+                // // ignore: unrelated_type_equality_checks
+                // if(oldPasswordController == ""){
+                //   print("ok");
+                // }
                 save();
               },
               teksnya: 'K I R I M',
@@ -136,16 +169,13 @@ class _DispensasiState extends State<Dispensasi> {
         clickClose: false, allowClick: false, crossPage: false);
 
     Map<String, String> body = {
-      'nama_lengkap': data['karyawan']['nama_lengkap'].toString(),
-      'user_id_penerima':
-          data['karyawan']['jabatan']['atasan_1']['user']['id_user'].toString(),
-      'tgl_absen': dateController.text,
-      'tipe_absen': "Dispensasi",
-      'detail_absen': deskripsiController.text,
+      'password' : passwordController.text,
+      'newpassword' : newPasswordController.text,
+      'confirmpassword' : newConfirmPasswordController.text
     };
 
     print(body);
-    await ApiController().dispensasiSubmit(body).then((response) {
+    await ApiController().changePassword(body).then((response) {
       if (response.data['success']){
         BotToast.closeAllLoading();
         Navigator.pop(context);

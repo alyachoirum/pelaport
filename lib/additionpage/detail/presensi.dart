@@ -1,14 +1,13 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
 import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/constant.dart';
-import 'package:safe_device/safe_device.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:safe_device/safe_device.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:pelaport/apicontroller.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:dio/dio.dart';
+import 'package:trust_location/trust_location.dart';
 
 class PresensiMasuk extends StatefulWidget {
   const PresensiMasuk({Key? key}) : super(key: key);
@@ -24,6 +23,8 @@ class _PresensiMasukState extends State<PresensiMasuk> {
   double lat = 0.0, lng = 0.0;
 
   String action = "";
+  bool canMockLocation = true;
+  bool isMockLocation = true;
 
   @override
   void initState() {
@@ -32,18 +33,18 @@ class _PresensiMasukState extends State<PresensiMasuk> {
   }
 
   cek() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    var idregu = prefs.getString('id_regu');
-    var idKar = prefs.getString('id_karyawan');
   }
 
   @override
   Widget build(BuildContext context) {
+
     Future _save() async {
-      bool canMockLocation = await SafeDevice.canMockLocation;
+      // TrustLocation.start(5);
+      // getLocation();
+      
+      print(isMockLocation);
       print("SAFE DEVICE : $canMockLocation");
-      if (canMockLocation)
+      if (isMockLocation)
         showDialog(
           context: context,
           barrierDismissible: false, // user must tap button!
@@ -77,6 +78,7 @@ class _PresensiMasukState extends State<PresensiMasuk> {
           'id_regu': data['karyawan']['regu']['id_regu'].toString(),
           'id_jabatan': data['karyawan']['jabatan']['id_jabatan'].toString()
         };
+        // print(action);
         if (action == "OFF") {
           body['jadwal_kerja'] = "OFF";
         } else {
@@ -135,6 +137,8 @@ class _PresensiMasukState extends State<PresensiMasuk> {
         });
       }
     }
+
+    
 
     return Scaffold(
       bottomSheet: PrimaryButton(
@@ -276,6 +280,11 @@ class _PresensiMasukState extends State<PresensiMasuk> {
           lokasiController.text = lat.toString() + ", " + lng.toString();
         });
     });
+    bool hasil = await TrustLocation.isMockLocation;
+    setState(() {
+      isMockLocation = hasil;
+    });
+
   }
 }
 
@@ -335,7 +344,7 @@ class InfoUser extends StatelessWidget {
         ? Container(
             padding: EdgeInsets.symmetric(horizontal: marginhorizontal),
             width: lebarlayar,
-            height: tinggilayar / 3,
+            height: tinggilayar / 2.5,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(

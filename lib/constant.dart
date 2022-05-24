@@ -6,13 +6,13 @@ Color primarycolor = Color(0xff009933);
 Color secondarycolor = Color(0xffEDF8EE);
 var marginhorizontal;
 
-//URL HOST
-// String baseUrl = "segments.securitypg.com";
-// String protokol = "https://";
+// URL HOST
+String baseUrl = "sikekar.keamanan-pg.com";
+String protokol = "https://";
 
 //URL LOCAL
-String baseUrl = "192.168.18.185:8000";
-String protokol = "http://";
+// String baseUrl = "192.168.18.185:8000";
+// String protokol = "http://";
 
 var dataUser;
 

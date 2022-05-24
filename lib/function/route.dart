@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 pindahPageCupertino(context, Widget route) {
   Navigator.push(context, CupertinoPageRoute(builder: (_) => route));

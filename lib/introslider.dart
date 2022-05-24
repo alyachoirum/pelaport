@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:pelaport/constant.dart';
-import 'package:pelaport/home.dart';
 import 'package:pelaport/items_slide.dart';
-import 'package:pelaport/my_function.dart';
 import 'package:pelaport/slide_dots.dart';
 import 'package:pelaport/slide_items.dart';
 import 'package:pelaport/views/login/login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroSlider extends StatefulWidget {
   @override
@@ -65,7 +62,7 @@ class _IntroSliderState extends State<IntroSlider> {
                 height: tinggilayar,
                 width: lebarlayar,
                 child: PageView.builder(
-                  scrollDirection: Axis.horizontal,
+                  // scrollDirection: Axis.horizontal,
                   controller: _pageController,
                   onPageChanged: _onPageChanged,
                   itemCount: slideList.length,
