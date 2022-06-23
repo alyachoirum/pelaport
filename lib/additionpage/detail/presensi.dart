@@ -66,6 +66,7 @@ class _PresensiMasukState extends State<PresensiMasuk> {
         );
       else {
         BotToast.showLoading();
+        print(data);
         var body = {
           'nama_lengkap': data['karyawan']['nama_lengkap'].toString(),
           'user_id_penerima': data['karyawan']['jabatan']['atasan_1']['user']
@@ -90,6 +91,7 @@ class _PresensiMasukState extends State<PresensiMasuk> {
               " - " +
               data['jadwal']['jam_keluar'].toString();
         }
+        print("ini bisa");
         await ApiController().checkin(body).then((response) {
           var value = response.data;
           if (value['success'] == true) {

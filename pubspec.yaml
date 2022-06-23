@@ -48,6 +48,8 @@ dependencies:
   equatable: ^2.0.3
   jiffy: ^5.0.0
   trust_location: ^2.0.13
+  mac_address: ^1.0.0
+  device_info_plus: ^3.2.3
 
 dev_dependencies:
   flutter_test:

@@ -48,7 +48,7 @@ class ApiController {
       }
     } else {
       res = await http.post(url, body: body);
-      print(res.body);
+      print(body);
       try{
         if(res.statusCode == StatusCode.OK ){
           // print("iki;lo");

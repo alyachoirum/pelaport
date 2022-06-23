@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/views/home/home.dart';
 import 'package:pelaport/views/schedule/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:get_mac/get_mac.dart';
+import 'package:mac_address/mac_address.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 import '../../apicontroller.dart';
 
@@ -65,69 +71,105 @@ class _LoginState extends State<Login> {
     }
 
     // print(body);\
+    Future<String?> _getId() async {
+      var deviceInfo = DeviceInfoPlugin();
+      if (Platform.isIOS) { // import 'dart:io'
+        var iosDeviceInfo = await deviceInfo.iosInfo;
+        return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+      } else if(Platform.isAndroid) {
+        var androidDeviceInfo = await deviceInfo.androidInfo;
+        return androidDeviceInfo.androidId; // unique ID on Android
+      }
+    }
     Future _save() async {
-      BotToast.showLoading();
-      Map<String, String> body = {
-        'nik': _nikcontroller.text,
-        'password': _passwordcontroller.text,
-      };
-      await ApiController().login(body).then(
-        (response) {
-          var value = response.data;
-          print(response.status);
-          print(response.data);
-          print(value);
-          if (response.status == false) {
-            BotToast.closeAllLoading();
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Error'),
-                  content: Text(value['message']),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('Ok'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
+      String? idDevice = "unknown";
+
+      idDevice = await _getId();
+      print(idDevice);
+      
+      if(idDevice != "unknown"){
+        BotToast.showLoading();
+        Map<String, String> body = {
+          'nik': _nikcontroller.text,
+          'password': _passwordcontroller.text,
+        };
+        await ApiController().login(body).then(
+          (response) {
+            var value = response.data;
+            print(response.status);
+            print(response.data);
+            print(value);
+            if (response.status == false) {
+              BotToast.closeAllLoading();
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Error'),
+                    content: Text(value['message']),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Ok'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else if (response.status == true) {
+              BotToast.closeAllLoading();
+              saveToken(value['token']);
+              saveId(value['id_regu'].toString(), value['id_karyawan'].toString(),
+                      value['nik'].toString(), _passwordcontroller.text)
+                  .then((value) {
+                _initUser();
+              });
+            } else {
+              BotToast.closeAllLoading();
+              showDialog(
+                context: context,
+                barrierDismissible: false, // user must tap button!
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Error'),
+                    content: Text('Pastikan mengisi dengan benar'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Ok'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+          },
+        );
+      }else{
+        showDialog(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text('Device tidak diketahui'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             );
-          } else if (response.status == true) {
-            BotToast.closeAllLoading();
-            saveToken(value['token']);
-            saveId(value['id_regu'].toString(), value['id_karyawan'].toString(),
-                    value['nik'].toString(), _passwordcontroller.text)
-                .then((value) {
-              _initUser();
-            });
-          } else {
-            BotToast.closeAllLoading();
-            showDialog(
-              context: context,
-              barrierDismissible: false, // user must tap button!
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Error'),
-                  content: Text('Pastikan mengisi dengan benar'),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('Ok'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          }
-        },
-      );
+          },
+        );
+      }
     }
 
     return Scaffold(
