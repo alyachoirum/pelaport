@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:pelaport/additionpage/detail/lemburEdit.dart';
+import 'package:pelaport/additionpage/detail/lemburKhususEdit.dart';
 import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
+import 'package:pelaport/function/route.dart';
 import 'package:pelaport/my_function.dart';
 
 class ListLemburKhususDetail extends StatefulWidget {
@@ -83,9 +86,13 @@ class _ListLemburKhususDetailState extends State<ListLemburKhususDetail> {
     return [
       DataColumn(label: Text('No')),
       DataColumn(label: Text('Tgl LemburKhusus')),
+      DataColumn(label: Text('Jenis LemburKhusus')),
+      DataColumn(label: Text('Mulai')),
+      DataColumn(label: Text('Selesai')),
       DataColumn(label: Text('NIK')),
       DataColumn(label: Text('Nama')),
       DataColumn(label: Text('Kajaga')),
+      DataColumn(label: Text('Aksi')),
     ];
   }
   List<DataRow> _createRows() {
@@ -96,9 +103,25 @@ class _ListLemburKhususDetailState extends State<ListLemburKhususDetail> {
             return DataRow(cells: [
               DataCell(Text(num.toString())),
               DataCell(Text(data['tgl_lembur_khusus'].toString())),
+              DataCell(Text(data['jenis_lembur_khusus'].toString())),
+              DataCell(Text(data['mulai'].toString())),
+              DataCell(Text(data['selesai'].toString())),
               DataCell(Text(data['nik'])),
               DataCell(Text(data['karyawan']['nama_lengkap'])),
-              DataCell(Text(""))
+              DataCell(Text("")),
+              DataCell(GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  pindahPageCupertino(context, LemburKhususEdit(
+                    id_lembur_khusus: data['id_lembur_khusus'].toString(),
+                    jenisLemburKhusus: data['jenis_lembur_khusus'].toString(),
+                    tglLemburKhusus: data['tgl_lembur_khusus'].toString(),
+                    mulai: data['mulai'].toString().substring(0,5),
+                    selesai: data['selesai'].toString().substring(0,5),
+                  ));
+                },
+                child: new Text("Edit",),
+              ))
             ]);
             }
             )
@@ -107,6 +130,10 @@ class _ListLemburKhususDetailState extends State<ListLemburKhususDetail> {
       return [
       DataRow(cells: [
         DataCell(Text('Data Tidak ada')),
+        DataCell(Text('')),
+        DataCell(Text('')),
+        DataCell(Text('')),
+        DataCell(Text('')),
         DataCell(Text('')),
         DataCell(Text('')),
         DataCell(Text('')),

@@ -5,6 +5,8 @@ import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/class/form_component.dart';
 import 'package:pelaport/constant.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:pelaport/function/route.dart';
+import 'package:pelaport/views/laporan/pencarian_parent.dart';
 
 
 class LemburKhusus extends StatefulWidget {
@@ -17,8 +19,35 @@ class LemburKhusus extends StatefulWidget {
 class _LemburKhususState extends State<LemburKhusus> {
   final dateController = TextEditingController();
   final deskripsiController = TextEditingController();
+  final timeMulaiController = TextEditingController();
+  final timeSelesaiController = TextEditingController();
+  final jenisLemburKhususController = TextEditingController();
 
   int _currentHorizontalIntValue = 1;
+
+  Future timemulai() async{
+    final TimeOfDay? timeMulai = await showTimePicker(
+      context: context, 
+      initialTime: TimeOfDay.fromDateTime(DateTime.now())
+      );
+
+    if(timeMulai != null){
+      timeMulaiController.text = timeMulai.format(context);
+      print(timeMulai.format(context));
+    }
+  }
+
+  Future timeselesai() async{
+    final TimeOfDay? timeSelesai = await showTimePicker(
+      context: context, 
+      initialTime: TimeOfDay.fromDateTime(DateTime.now().add(const Duration(hours: 1, minutes: 0, seconds: 0)))
+      );
+
+    if(timeSelesai != null){
+      timeSelesaiController.text = timeSelesai.format(context);
+      print(timeSelesai.toString());
+    }
+  }
 
   Future datepicker() async {
     final DateTime? tgl = await showDatePicker(
@@ -66,26 +95,23 @@ class _LemburKhususState extends State<LemburKhusus> {
             SizedBox(
               height: 20,
             ),
-            label("Total Jam Lembur Khusus"),
+            myContainer(Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      label("Jenis Lembur Khusus"),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      CustomTextFormField(
+                          onTap: getJenisLemburKhusus,
+                          isDropdown: true,
+                          isRequired: true,
+                          controller: jenisLemburKhususController,
+                          placeholder: "Jenis"),
+                    ]
+            )),
             SizedBox(
               height: 16,
-            ),
-            NumberPicker(
-              value: _currentHorizontalIntValue,
-              minValue: 1,
-              maxValue: 8,
-              step: 1,
-              itemHeight: 30,
-              axis: Axis.horizontal,
-              onChanged: (value) =>
-                  setState(() => _currentHorizontalIntValue = value),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: Colors.black26),
-              ),
-            ),
-            SizedBox(
-              height: 25,
             ),
             myContainer(Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,6 +127,46 @@ class _LemburKhususState extends State<LemburKhusus> {
                   placeholder: "Pilih Tanggal",
                   isRequired: true,
                   onTap: datepicker,
+                )
+              ],
+            )),
+            SizedBox(
+              height: 16,
+            ),
+            myContainer(Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                label("Jam mulai lembur khusus"),
+                SizedBox(
+                  height: 4,
+                ),
+                CustomTextFormField(
+                  controller: timeMulaiController,
+                  isDatePicker: true,
+                  isReadonly: true,
+                  placeholder: "Pilih Jam",
+                  isRequired: true,
+                  onTap: timemulai,
+                )
+              ],
+            )),
+            SizedBox(
+              height: 16,
+            ),
+            myContainer(Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                label("Jam selesai lembur khusus"),
+                SizedBox(
+                  height: 4,
+                ),
+                CustomTextFormField(
+                  controller: timeSelesaiController,
+                  isDatePicker: true,
+                  isReadonly: true,
+                  placeholder: "Pilih Jam",
+                  isRequired: true,
+                  onTap: timeselesai,
                 )
               ],
             )),
@@ -155,6 +221,18 @@ class _LemburKhususState extends State<LemburKhusus> {
     );
   }
 
+  Future getJenisLemburKhusus() async {
+    final result = await pindahPageCupertinoResult(context, PencarianParent(tipe: "jenisLemburKhusus"));
+    
+
+    if (result != null) {
+      if (mounted)
+        setState(() {
+          jenisLemburKhususController.text = result;
+        });
+    }
+  }
+
   Future save() async {
     BotToast.showLoading(
         clickClose: false, allowClick: false, crossPage: false);
@@ -165,7 +243,9 @@ class _LemburKhususState extends State<LemburKhusus> {
           data['karyawan']['jabatan']['atasan_1']['user']['id_user'].toString(),
       'nama_zona': data['karyawan']['zona']['nama_zona'].toString(),
       'tgl_lembur_khusus': dateController.text,
-      'total_jam_lembur_khusus': _currentHorizontalIntValue.toString(),
+      'jenis_lembur_khusus' : jenisLemburKhususController.text,
+      'mulai' : timeMulaiController.text,
+      'selesai' : timeSelesaiController.text,
       'detail_lembur_khusus': deskripsiController.text,
     };
 

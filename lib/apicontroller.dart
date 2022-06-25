@@ -186,6 +186,22 @@ class ApiController {
         method: 'post', path: "user/lemburkhusus_submit", body: body);
   }
 
+  Future lemburEdit(Map<String, String> body) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var nik = prefs.getString('nik');
+    body['nik'] = nik.toString();
+    return await connection(
+        method: 'post', path: "user/lembur_edit", body: body);
+  }
+
+  Future lemburkhususEdit(Map<String, String> body) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var nik = prefs.getString('nik');
+    body['nik'] = nik.toString();
+    return await connection(
+        method: 'post', path: "user/lemburkhusus_edit", body: body);
+  }
+
   Future getJadwal(Map<String,String> body) async{
     return await connection(method: 'get',path: "user/get_jadwal",parameter: body);
   }

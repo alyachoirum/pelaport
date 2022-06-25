@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pelaport/additionpage/list_data_detail/list_absen.dart';
 import 'package:pelaport/additionpage/list_data_detail/list_lembur.dart';
+import 'package:pelaport/additionpage/list_data_detail/list_lembur_khusus.dart';
 import 'package:pelaport/additionpage/list_data_detail/list_presensi.dart';
+import 'package:pelaport/additionpage/list_data_detail/slip_gaji.dart';
 import 'package:pelaport/constant.dart';
 import 'package:pelaport/function/route.dart';
 
@@ -79,10 +81,10 @@ class _ListDataState extends State<ListData> {
                       fit: BoxFit.cover,
                     ),
                     fungsi: () {
-                      pindahPageCupertino(context, ListLembur());
+                      pindahPageCupertino(context, SlipGaji());
                       // MyFunction().belumTersedia();
                     },
-                    judul: "List Lembur Khusus",
+                    judul: "Slip Gaji",
                     deskripsi: "Ini Deksripsi",
                   ),
                   SizedBox(

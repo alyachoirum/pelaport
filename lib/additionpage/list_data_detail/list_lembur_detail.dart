@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:pelaport/additionpage/detail/lembur.dart';
+import 'package:pelaport/additionpage/detail/lemburEdit.dart';
 import 'package:pelaport/apicontroller.dart';
 import 'package:pelaport/constant.dart';
+import 'package:pelaport/function/route.dart';
 import 'package:pelaport/my_function.dart';
 
 class ListLemburDetail extends StatefulWidget {
@@ -83,9 +86,13 @@ class _ListLemburDetailState extends State<ListLemburDetail> {
     return [
       DataColumn(label: Text('No')),
       DataColumn(label: Text('Tgl Lembur')),
+      DataColumn(label: Text('Jenis Lembur')),
+      DataColumn(label: Text('Mulai')),
+      DataColumn(label: Text('Selesai')),
       DataColumn(label: Text('NIK')),
       DataColumn(label: Text('Nama')),
       DataColumn(label: Text('Kajaga')),
+      DataColumn(label: Text('Aksi')),
     ];
   }
   List<DataRow> _createRows() {
@@ -96,9 +103,27 @@ class _ListLemburDetailState extends State<ListLemburDetail> {
             return DataRow(cells: [
               DataCell(Text(num.toString())),
               DataCell(Text(data['tgl_lembur'].toString())),
+              DataCell(Text(data['jenis_lembur'].toString())),
+              DataCell(Text(data['mulai'].toString())),
+              DataCell(Text(data['selesai'].toString())),
               DataCell(Text(data['nik'])),
               DataCell(Text(data['karyawan']['nama_lengkap'])),
-              DataCell(Text(""))
+              DataCell(Text("")),
+              DataCell(GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  pindahPageCupertino(context, LemburEdit(
+                    id_lembur: data['id_lembur'].toString(),
+                    jenisLembur: data['jenis_lembur'].toString(),
+                    tglLembur: data['tgl_lembur'].toString(),
+                    mulai: data['mulai'].toString().substring(0,5),
+                    selesai: data['selesai'].toString().substring(0,5),
+                  ));
+                },
+                child: new Text("Edit",style: 
+                  TextStyle(color: Colors.red)
+                ,),
+              ))
             ]);
             }
             )
@@ -107,6 +132,10 @@ class _ListLemburDetailState extends State<ListLemburDetail> {
       return [
       DataRow(cells: [
         DataCell(Text('Data Tidak ada')),
+        DataCell(Text('')),
+        DataCell(Text('')),
+        DataCell(Text('')),
+        DataCell(Text('')),
         DataCell(Text('')),
         DataCell(Text('')),
         DataCell(Text('')),

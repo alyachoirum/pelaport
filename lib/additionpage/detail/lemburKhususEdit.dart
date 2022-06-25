@@ -9,20 +9,32 @@ import 'package:pelaport/function/route.dart';
 import 'package:pelaport/views/laporan/pencarian_parent.dart';
 
 
-class Lembur extends StatefulWidget {
-  const Lembur({Key? key}) : super(key: key);
+class LemburKhususEdit extends StatefulWidget {
+  final String jenisLemburKhusus;
+  final String tglLemburKhusus;
+  final String mulai;
+  final String selesai;
+  final String id_lembur_khusus;
+
+  const LemburKhususEdit({Key? key,
+                    required this.jenisLemburKhusus,
+                    required this.mulai, 
+                    required this.selesai, 
+                    required this.tglLemburKhusus,
+                    required this.id_lembur_khusus
+                    }) : super(key: key);
 
   @override
-  _LemburState createState() => _LemburState();
+  _LemburKhususEditState createState() => _LemburKhususEditState();
 }
 
-class _LemburState extends State<Lembur> {
-  final dateController = TextEditingController();
-  final deskripsiController = TextEditingController();
-  final timeMulaiController = TextEditingController();
-  final timeSelesaiController = TextEditingController();
-  final jenisLemburController = TextEditingController();
-  String totalLembur = "0";
+class _LemburKhususEditState extends State<LemburKhususEdit> {
+  var dateController = TextEditingController();
+  var deskripsiController = TextEditingController();
+  var timeMulaiController = TextEditingController();
+  var timeSelesaiController = TextEditingController();
+  var jenisLemburController = TextEditingController();
+  String sisaLembur = "0";
 
   int _currentHorizontalIntValue = 1;
 
@@ -41,7 +53,7 @@ class _LemburState extends State<Lembur> {
   Future timemulai() async{
     final TimeOfDay? timeMulai = await showTimePicker(
       context: context, 
-      initialTime: TimeOfDay.fromDateTime(DateTime.now())
+      initialTime: TimeOfDay.now()
       );
 
     if(timeMulai != null){
@@ -53,7 +65,7 @@ class _LemburState extends State<Lembur> {
   Future timeselesai() async{
     final TimeOfDay? timeSelesai = await showTimePicker(
       context: context, 
-      initialTime: TimeOfDay.fromDateTime(DateTime.now().add(const Duration(hours: 1, minutes: 0, seconds: 0)))
+      initialTime: TimeOfDay.now()
       );
 
     if(timeSelesai != null){
@@ -85,7 +97,7 @@ class _LemburState extends State<Lembur> {
           ),
         ),
         title: Text(
-          "Form Lembur SPL",
+          "Edit Form Lembur Khusus",
           style: TextStyle(color: primarycolor, fontWeight: FontWeight.bold),
         ),
       ),
@@ -95,12 +107,6 @@ class _LemburState extends State<Lembur> {
             InfoUser(),
             SizedBox(
               height: 20,
-            ),
-            Text(
-                "Total Lembur pada bulan ini: "+totalLembur+" jam",
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                    fontSize: tinggilayar / lebarlayar * 6),
             ),
             SizedBox(
                 height: tinggilayar / 40,
@@ -183,26 +189,7 @@ class _LemburState extends State<Lembur> {
                 )
               ],
             )),
-            SizedBox(
-              height: 16,
-            ),
-            myContainer(
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  label("Deskripsi"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CustomTextFormField(
-                    isLongText: true,
-                    controller: deskripsiController,
-                    placeholder: "Masukkan Deskripsi",
-                    isRequired: true,
-                  )
-                ],
-              ),
-            ),
+            
             SizedBox(
               height: 32,
             ),
@@ -251,18 +238,15 @@ class _LemburState extends State<Lembur> {
         clickClose: false, allowClick: false, crossPage: false);
 
     Map<String, String> body = {
-      'nama_lengkap': data['karyawan']['nama_lengkap'].toString(),
-      'user_id_penerima':
-          data['karyawan']['jabatan']['atasan_1']['user']['id_user'].toString(),
-      'tgl_lembur': dateController.text,
-      'jenis_lembur' : jenisLemburController.text,
+      'id_lembur_khusus' : widget.id_lembur_khusus,
+      'tgl_lembur_khusus': dateController.text,
+      'jenis_lembur_khusus' : jenisLemburController.text,
       'mulai' : timeMulaiController.text,
       'selesai' : timeSelesaiController.text,
-      'detail_lembur': deskripsiController.text,
     };
 
     print(body);
-    await ApiController().lemburSubmit(body).then((response) {
+    await ApiController().lemburkhususEdit(body).then((response) {
       if (response.data['success']){
         BotToast.closeAllLoading();
         Navigator.pop(context);
@@ -297,12 +281,16 @@ class _LemburState extends State<Lembur> {
   }
 
   Future init() async {
+    jenisLemburController = TextEditingController(text: widget.jenisLemburKhusus);
+    dateController = TextEditingController(text: widget.tglLemburKhusus);
+    timeMulaiController  = TextEditingController(text: widget.mulai); 
+    timeSelesaiController  = TextEditingController(text: widget.selesai); 
     await ApiController().getUser().then((value) {
       if (mounted
       )
         setState(() {
           data = value.data;
-          totalLembur = data["total_lembur"].toString();
+          sisaLembur = data["sisa_lembur"].toString();
           print("data=$data");
         });
     });

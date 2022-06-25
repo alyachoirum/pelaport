@@ -76,20 +76,20 @@ class _PengajuanState extends State<Pengajuan> {
                 judul: "Lembur SPL",
                 deskripsi: "Ini Deksripsi",
               ),
-              SizedBox(
-                height: tinggilayar / 40,
-              ),
-              CardFunction(
-                asset: Image.asset(
-                  "assets/lembur.png",
-                  fit: BoxFit.cover,
-                ),
-                fungsi: () {
-                  pindahPageCupertino(context, LemburKhusus());
-                },
-                judul: "Lembur Khusus",
-                deskripsi: "Ini Deksripsi",
-              ),
+              // SizedBox(
+              //   height: tinggilayar / 40,
+              // ),
+              // CardFunction(
+              //   asset: Image.asset(
+              //     "assets/lembur.png",
+              //     fit: BoxFit.cover,
+              //   ),
+              //   fungsi: () {
+              //     pindahPageCupertino(context, LemburKhusus());
+              //   },
+              //   judul: "Lembur Khusus",
+              //   deskripsi: "Ini Deksripsi",
+              // ),
             ],
           ),
         ),

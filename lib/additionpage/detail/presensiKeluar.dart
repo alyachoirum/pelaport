@@ -64,7 +64,7 @@ class _PresensiKeluarState extends State<PresensiKeluar> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Error'),
-                content: Text('Gagal checkout'),
+                content: Text(value['message']),
                 actions: <Widget>[
                   TextButton(
                     child: const Text('Ok'),

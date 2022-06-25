@@ -42,6 +42,21 @@ class _PencarianParentState extends State<PencarianParent> {
                   Navigator.pop(context, data[i]);
                 },
               );
+            }else if(widget.tipe == "jenisLembur"){
+              return ListTile(
+                title: Text(data[i]),
+                onTap: () {
+                  Navigator.pop(context, data[i]);
+                },
+              );
+            }
+            else if(widget.tipe == "jenisLemburKhusus"){
+              return ListTile(
+                title: Text(data[i]),
+                onTap: () {
+                  Navigator.pop(context, data[i]);
+                },
+              );
             }
             return ListTile(
                     title: Text(data[i]),
